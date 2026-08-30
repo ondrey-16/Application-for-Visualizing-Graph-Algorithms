@@ -1,59 +1,101 @@
-namespace AVGA.GraphLibrary
+namespace AVGA.GraphLibrary;
+
+public class MatrixGraphRepresentation<T> : GraphRepresentation<T>
 {
-    public class MatrixGraphRepresentation<T> : IGraphRepresentation<T>
+    private readonly (bool, T)[,] _graph;
+
+    public MatrixGraphRepresentation(int V) : base(V)
     {
-        private readonly int _V;
-        private int _E;
-        private readonly (bool, T)[,] _graph;
-        public MatrixGraphRepresentation(int V)
-        {
-            _V = V;
-            _graph = new (bool, T)[_V,_V];
-            _E = 0;
-        }
-        public int VertexCount => _V;
+        _graph = new (bool, T)[_V,_V];
+    }
+    public override bool AddEdge(int u, int v, T w)
+    {
+        CheckEdge(u, v);
 
-        public int EdgeCount => _E;
-
-        public void AddEdge(int u, int v, T w)
+        if (!_graph[u, v].Item1)
         {
             _graph[u, v] = (true, w);
             _E++;
+            _inDegrees[v]++;
+            _outDegrees[u]++;
+
+            return true;
         }
 
-        public int GetDegree(int v)
-        {
-            int deg = 0;
-            for (int i = 0; i < _V; i++)
-            {
-                if (_graph[v, i].Item1)
-                {
-                    deg++;
-                }
-            }
+        return false;
+    }
 
-            return deg;
-        }
+    public override bool RemoveEdge(int u, int v)
+    {
+        CheckEdge(u, v);
 
-        public T? GetEdgeWeight(int u, int v) => _graph[u, v].Item2;
-        public List<int> GetNeighbours(int v)
-        {
-            List<int> neighbours = new();
-
-            for (int i = 0; i < _V; i++)
-            {
-                if (_graph[v, i].Item1)
-                {
-                    neighbours.Add(i);
-                }
-            }
-
-            return neighbours;
-        }
-
-        public void RemoveEdge(int u, int v)
+        if (_graph[u, v].Item1)
         {
             _graph[u, v].Item1 = false;
+            _E--;
+            _inDegrees[v]--;
+            _outDegrees[u]--;
+
+            return true;
         }
+
+        return false;
+    }
+
+    public override T GetEdgeWeight(int u, int v)
+    {
+        CheckEdge(u, v);
+
+        if (_graph[u, v].Item1)
+        {
+            return _graph[u, v].Item2;
+        }
+
+        throw new NonExistingEdgeException(u, v);
+    }
+
+    public override IEnumerable<int> GetNeighbours(int v)
+    {
+        CheckVertex(v);
+
+        for (int i = 0; i < _V; i++)
+        {
+            if (_graph[v, i].Item1)
+            {
+                yield return i;
+            }
+        }
+    }
+
+    public override IEnumerable<(int, T)> GetOutEdges(int v)
+    {
+        CheckVertex(v);
+
+        for (int i = 0; i < _V; i++)
+        {
+            if (_graph[v, i].Item1)
+            {
+                yield return (i, _graph[v, i].Item2);
+            }
+        }
+    }
+
+    public override void SetEdgeWeight(int u, int v, T w)
+    {
+        CheckEdge(u, v);
+
+        if (!_graph[u, v].Item1)
+        {
+            throw new NonExistingEdgeException(u, v);
+        }
+
+        _graph[u, v].Item2 = w;
+    }
+
+    public override bool HasEdge(int u, int v)
+    {
+        CheckEdge(u, v);
+        
+        return _graph[u, v].Item1;
     }
 }
