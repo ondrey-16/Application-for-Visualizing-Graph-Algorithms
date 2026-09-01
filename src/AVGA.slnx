@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/lib/">
+    <Project Path="lib/GraphLibrary.Tests/GraphLibrary.Tests.csproj" />
     <Project Path="lib/GraphLibrary/GraphLibrary.csproj" />
   </Folder>
 </Solution>
