@@ -1,6 +1,6 @@
 namespace AVGA.GraphLibrary;
 
-public class MatrixGraphRepresentation<T> : GraphRepresentation<T>
+public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INumber<T>
 {
     private readonly (bool, T)[,] _graph;
 
@@ -8,13 +8,13 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T>
     {
         _graph = new (bool, T)[_V,_V];
     }
-    public override bool AddEdge(int u, int v, T w)
+    public override bool AddEdge(int u, int v)
     {
         CheckEdge(u, v);
 
         if (!_graph[u, v].Item1)
         {
-            _graph[u, v] = (true, w);
+            _graph[u, v] = (true, T.Zero);
             _E++;
             _inDegrees[v]++;
             _outDegrees[u]++;

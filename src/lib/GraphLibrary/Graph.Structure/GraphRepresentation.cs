@@ -1,6 +1,6 @@
 namespace AVGA.GraphLibrary;
 
-public abstract class GraphRepresentation<T> : IGraphRepresentation<T>
+public abstract class GraphRepresentation<T> : IGraphMethods<T> where T : INumber<T>
 {
     protected readonly int _V;
     protected int _E;
@@ -18,7 +18,7 @@ public abstract class GraphRepresentation<T> : IGraphRepresentation<T>
         _E = 0;
     }
 
-    abstract public bool AddEdge(int u, int v, T w);
+    abstract public bool AddEdge(int u, int v);
     abstract public bool RemoveEdge(int u, int v);
     abstract public T GetEdgeWeight(int u, int v);
     abstract public IEnumerable<int> GetNeighbours(int v);

@@ -1,6 +1,6 @@
 namespace AVGA.GraphLibrary;
 
-public class ListGraphRepresentation<T> : GraphRepresentation<T>
+public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumber<T>
 {
     private readonly List<List<(int, T)>> _graph;
 
@@ -14,13 +14,13 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T>
         }
     }
 
-    public override bool AddEdge(int u, int v, T w)
+    public override bool AddEdge(int u, int v)
     {
         CheckEdge(u, v);
 
         if (!_graph[u].Any(e => e.Item1 == v))
         {
-            _graph[u].Add((v, w));
+            _graph[u].Add((v, T.Zero));
             _E++;
             _inDegrees[v]++;
             _outDegrees[u]++;

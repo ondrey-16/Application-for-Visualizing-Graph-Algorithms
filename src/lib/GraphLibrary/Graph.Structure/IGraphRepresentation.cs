@@ -1,10 +1,10 @@
 namespace AVGA.GraphLibrary;
 
 /// <summary>
-/// Interface of methods necessary to operate on graph's representations.
+/// Interface of methods necessary to operate on graphs and their representations.
 /// </summary>
 /// <typeparam name="T">Type of edges' weights.</typeparam>
-public interface IGraphRepresentation<T>
+public interface IGraphMethods<T> where T : INumber<T>
 {
     /// <summary>
     /// Count of vertices building the graph.
@@ -21,9 +21,8 @@ public interface IGraphRepresentation<T>
     /// </summary>
     /// <param name="u">Start of the edge.</param>
     /// <param name="v">End of the edge.</param>
-    /// <param name="w">Weight of the edge</param>
     /// <returns>If edge added successfully.</returns>
-    public bool AddEdge(int u, int v, T w);
+    public bool AddEdge(int u, int v);
 
     /// <summary>
     /// Removes the edge if exists.
@@ -74,7 +73,9 @@ public interface IGraphRepresentation<T>
     /// Sets edge's weight if exists.
     /// </summary>
     /// <param name="v">Vertex</param>
+    /// <param name="w">Weight of the edge</param>
     public void SetEdgeWeight(int u, int v, T w);
+
     /// <summary>
     /// Returns information if edge exists.
     /// </summary>

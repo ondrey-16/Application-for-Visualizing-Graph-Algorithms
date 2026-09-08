@@ -5,40 +5,40 @@ public class ListGraphRepresentationTests
     [Fact]
     public void AddEdge_IncreasesEdgeCountValue()
     {
-        var graph = new ListGraphRepresentation<bool>(2);
+        var graph = new ListGraphRepresentation<int>(2);
 
         Assert.True(graph.EdgeCount.Equals(0));
-        Assert.True(graph.AddEdge(0, 1, true));
+        Assert.True(graph.AddEdge(0, 1));
         Assert.True(graph.EdgeCount.Equals(1));
-        Assert.True(graph.AddEdge(1, 0, true));
+        Assert.True(graph.AddEdge(1, 0));
         Assert.True(graph.EdgeCount.Equals(2));
     }
 
     [Fact]
     public void AddEdge_FalseAfterAddingExistingEdge()
     {
-        var graph = new ListGraphRepresentation<bool>(2);
+        var graph = new ListGraphRepresentation<int>(2);
 
-        Assert.True(graph.AddEdge(0, 1, true));
-        Assert.False(graph.AddEdge(0, 1, true));
+        Assert.True(graph.AddEdge(0, 1));
+        Assert.False(graph.AddEdge(0, 1));
     }
 
     [Fact]
     public void AddEdge_ThrowsExceptionAfterAddingWrongEdge()
     {
-        var graph = new ListGraphRepresentation<bool>(2);
+        var graph = new ListGraphRepresentation<int>(2);
 
-        Assert.Throws<InvalidEdgeException>(() => graph.AddEdge(0, -1, true));
-        Assert.Throws<InvalidEdgeException>(() => graph.AddEdge(3, 1, true));
+        Assert.Throws<InvalidEdgeException>(() => graph.AddEdge(0, -1));
+        Assert.Throws<InvalidEdgeException>(() => graph.AddEdge(3, 1));
     }
 
     [Fact]
     public void RemoveEdge_DecreasesEdgeCountValue()
     {
-        var graph = new ListGraphRepresentation<bool>(2);
+        var graph = new ListGraphRepresentation<int>(2);
 
         Assert.True(graph.EdgeCount.Equals(0));
-        Assert.True(graph.AddEdge(0, 1, true));
+        Assert.True(graph.AddEdge(0, 1));
         Assert.True(graph.EdgeCount.Equals(1));
         Assert.True(graph.RemoveEdge(0, 1));
         Assert.True(graph.EdgeCount.Equals(0));
@@ -47,7 +47,7 @@ public class ListGraphRepresentationTests
     [Fact]
     public void AddEdge_FalseAfterRemovingNonExistingEdge()
     {
-        var graph = new ListGraphRepresentation<bool>(2);
+        var graph = new ListGraphRepresentation<int>(2);
 
         Assert.False(graph.RemoveEdge(0, 1));
     }
@@ -55,7 +55,7 @@ public class ListGraphRepresentationTests
     [Fact]
     public void AddEdge_ThrowsExceptionAfterRemovingWrongEdge()
     {
-        var graph = new ListGraphRepresentation<bool>(2);
+        var graph = new ListGraphRepresentation<int>(2);
 
         Assert.Throws<InvalidEdgeException>(() => graph.RemoveEdge(0, -1));
         Assert.Throws<InvalidEdgeException>(() => graph.RemoveEdge(3, 1));
@@ -64,21 +64,21 @@ public class ListGraphRepresentationTests
     [Fact]
     public void GetEdgeWeight_GetsExistingEdgeWeight()
     {
-        var graph1 = new ListGraphRepresentation<bool>(2);
-        var graph2 = new ListGraphRepresentation<int>(2);
+        var graph1 = new ListGraphRepresentation<int>(2);
+        var graph2 = new ListGraphRepresentation<float>(2);
 
-        Assert.True(graph1.AddEdge(0, 1, true));
-        Assert.True(graph2.AddEdge(0, 1, 2));
+        Assert.True(graph1.AddEdge(0, 1));
+        Assert.True(graph2.AddEdge(0, 1));
 
-        Assert.True(graph1.GetEdgeWeight(0, 1).Equals(true));
-        Assert.True(graph2.GetEdgeWeight(0, 1).Equals(2));
+        Assert.True(graph1.GetEdgeWeight(0, 1).Equals(0));
+        Assert.True(graph2.GetEdgeWeight(0, 1).Equals(0.0f));
     }
 
     [Fact]
     public void GetEdgeWeight_ThrowExceptionFromNonExistingEdgeWeight()
     {
-        var graph1 = new ListGraphRepresentation<bool>(2);
-        var graph2 = new ListGraphRepresentation<int>(2);
+        var graph1 = new ListGraphRepresentation<int>(2);
+        var graph2 = new ListGraphRepresentation<float>(2);
 
         Assert.Throws<NonExistingEdgeException>(() => graph1.GetEdgeWeight(0, 1));
         Assert.Throws<NonExistingEdgeException>(() => graph2.GetEdgeWeight(0, 1));
@@ -87,10 +87,10 @@ public class ListGraphRepresentationTests
     [Fact]
     public void GetNeighbours_ReturnsCorrectCollection()
     {
-        var graph = new ListGraphRepresentation<bool>(3);
+        var graph = new ListGraphRepresentation<int>(3);
 
-        Assert.True(graph.AddEdge(0, 1, true));
-        Assert.True(graph.AddEdge(0, 2, true));
+        Assert.True(graph.AddEdge(0, 1));
+        Assert.True(graph.AddEdge(0, 2));
 
         var neighbours = graph.GetNeighbours(0).ToHashSet();
 
@@ -103,8 +103,10 @@ public class ListGraphRepresentationTests
     {
         var graph = new ListGraphRepresentation<int>(3);
 
-        Assert.True(graph.AddEdge(0, 1, 3));
-        Assert.True(graph.AddEdge(0, 2, 4));
+        Assert.True(graph.AddEdge(0, 1));
+        graph.SetEdgeWeight(0, 1, 3);
+        Assert.True(graph.AddEdge(0, 2));
+        graph.SetEdgeWeight(0, 2, 4);
 
         var edges = graph.GetOutEdges(0).ToHashSet();
 
@@ -117,8 +119,8 @@ public class ListGraphRepresentationTests
     {
         var graph = new ListGraphRepresentation<int>(3);
 
-        Assert.True(graph.AddEdge(0, 1, 2));
-        Assert.True(graph.AddEdge(2, 1, 2));
+        Assert.True(graph.AddEdge(0, 1));
+        Assert.True(graph.AddEdge(2, 1));
 
         Assert.True(graph.GetInDegree(1).Equals(2));
     }
@@ -128,8 +130,8 @@ public class ListGraphRepresentationTests
     {
         var graph = new ListGraphRepresentation<int>(3);
 
-        Assert.True(graph.AddEdge(0, 1, 2));
-        Assert.True(graph.AddEdge(0, 2, 2));
+        Assert.True(graph.AddEdge(0, 1));
+        Assert.True(graph.AddEdge(0, 2));
 
         Assert.True(graph.GetOutDegree(0).Equals(2));
     }
@@ -139,7 +141,7 @@ public class ListGraphRepresentationTests
     {
         var graph = new ListGraphRepresentation<int>(2);
 
-        Assert.True(graph.AddEdge(0, 1, 2));
+        Assert.True(graph.AddEdge(0, 1));
 
         graph.SetEdgeWeight(0, 1, 3);
 
@@ -151,7 +153,7 @@ public class ListGraphRepresentationTests
     {
         var graph = new ListGraphRepresentation<int>(2);
 
-        Assert.True(graph.AddEdge(0, 1, 2));
+        Assert.True(graph.AddEdge(0, 1));
 
         Assert.Throws<InvalidEdgeException>(() => graph.SetEdgeWeight(0, 2, 3));
         Assert.Throws<NonExistingEdgeException>(() => graph.SetEdgeWeight(1, 0, 3));
@@ -162,7 +164,7 @@ public class ListGraphRepresentationTests
     {
         var graph = new ListGraphRepresentation<int>(2);
 
-        Assert.True(graph.AddEdge(0, 1, 2));
+        Assert.True(graph.AddEdge(0, 1));
 
         Assert.True(graph.HasEdge(0, 1));
         Assert.False(graph.HasEdge(1, 0));
