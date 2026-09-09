@@ -3,7 +3,6 @@ namespace AVGA.GraphLibrary;
 public abstract class WeightedGraph<T> : Graph<T> where T : INumber<T>
 {
     protected GraphRepresentation<T> _representation;
-    protected RepresentationTypeEnum _representationType;
 
     public WeightedGraph(int V, RepresentationTypeEnum representationType)
     {
@@ -39,5 +38,35 @@ public abstract class WeightedGraph<T> : Graph<T> where T : INumber<T>
     public override void SetEdgeWeight(int u, int v, T w)
     {
         _representation.SetEdgeWeight(u, v, w);
+    }
+
+    private void CopyEdgesToNewRepresentation(GraphRepresentation<T> newRepresentation)
+    {
+        for (int i = 0; i < VertexCount; i++)
+        {
+            var edges = _representation.GetOutEdges(i);
+
+            foreach (var edge in edges)
+            {
+                newRepresentation.AddEdge(i, edge.Item1);
+                newRepresentation.SetEdgeWeight(i, edge.Item1, edge.Item2);
+            }
+        }
+    }
+
+    public override void ChangeToMatrixRepresentation()
+    {
+        MatrixGraphRepresentation<T> newRepresentation = new(VertexCount);
+        CopyEdgesToNewRepresentation(newRepresentation);
+        
+        _representation = newRepresentation;
+    }
+
+    public override void ChangeToListRepresentation()
+    {
+        ListGraphRepresentation<T> newRepresentation = new(VertexCount);
+        CopyEdgesToNewRepresentation(newRepresentation);
+        
+        _representation = newRepresentation;
     }
 }

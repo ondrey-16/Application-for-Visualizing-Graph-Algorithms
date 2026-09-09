@@ -2,6 +2,7 @@ namespace AVGA.GraphLibrary;
 
 public abstract class Graph<T> : IGraphMethods<T> where T : INumber<T>
 {
+    protected RepresentationTypeEnum _representationType;
     public abstract int VertexCount { get; }
 
     public abstract int EdgeCount { get; }
@@ -25,4 +26,27 @@ public abstract class Graph<T> : IGraphMethods<T> where T : INumber<T>
     public abstract bool HasEdge(int u, int v);
 
     public abstract object Clone();
+    public void ChangeRepresentation(RepresentationTypeEnum representationType)
+    {
+        if (_representationType == representationType)
+        {
+            return;
+        }
+
+        switch (representationType) 
+        {
+            case RepresentationTypeEnum.LIST: 
+                ChangeToListRepresentation();
+                break;
+            case RepresentationTypeEnum.MATRIX:
+                ChangeToMatrixRepresentation();
+                break;
+            default:
+                throw new InvalidRepresentationTypeException();
+        };
+    }
+
+    public abstract void ChangeToMatrixRepresentation();
+
+    public abstract void ChangeToListRepresentation();
 }

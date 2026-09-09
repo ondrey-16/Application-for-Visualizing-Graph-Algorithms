@@ -3,7 +3,6 @@ namespace AVGA.GraphLibrary;
 public class UnweightedGraph : Graph<short>
 {
     private WeightedGraph<short> _graph;
-    private RepresentationTypeEnum _representationType;
     private bool _isDirected;
 
     public UnweightedGraph(int V, RepresentationTypeEnum representationType, bool isDirected)
@@ -65,5 +64,15 @@ public class UnweightedGraph : Graph<short>
             : (UndirectedGraph<short>) this._graph.Clone();
 
         return cloned;
+    }
+
+    public override void ChangeToMatrixRepresentation()
+    {
+        _graph.ChangeToMatrixRepresentation();
+    }
+
+    public override void ChangeToListRepresentation()
+    {
+        _graph.ChangeToListRepresentation();
     }
 }
