@@ -4,7 +4,7 @@ namespace AVGA.GraphLibrary;
 /// Interface of methods necessary to operate on graphs and their representations.
 /// </summary>
 /// <typeparam name="T">Type of edges' weights.</typeparam>
-public interface IGraphMethods<T> where T : INumber<T>
+public interface IGraphMethods<T> : ICloneable where T : INumber<T>
 {
     /// <summary>
     /// Count of vertices building the graph.

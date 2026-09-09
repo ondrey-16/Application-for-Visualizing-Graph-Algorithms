@@ -65,4 +65,6 @@ public abstract class GraphRepresentation<T> : IGraphMethods<T> where T : INumbe
             throw new InvalidEdgeException(u, v, _V);
         }
     }
+
+    public abstract object Clone();
 }

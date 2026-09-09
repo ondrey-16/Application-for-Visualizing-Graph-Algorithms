@@ -85,9 +85,7 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
         {
             if (_graph[u][i].Item1 == v)
             {
-                _graph[u].RemoveAt(i);
-                _graph[u].Add((v, w));
-
+                _graph[u][i] = (v, w);
                 return;
             }
         }
@@ -100,5 +98,26 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
         CheckEdge(u, v);
         
         return _graph[u].Any(e => e.Item1 == v);
+    }
+
+    public override object Clone()
+    {
+        ListGraphRepresentation<T> cloned = new(_V);
+
+        for (int i = 0; i < this._V; i++)
+        {
+            cloned._inDegrees[i] = this._inDegrees[i];
+            cloned._outDegrees[i] = this._outDegrees[i];
+            cloned._graph[i] = new List<(int, T)>(this._graph[i].Count);
+
+            for (int j = 0; j < this._graph[i].Count; j++)
+            {
+                cloned._graph[i][j] = this._graph[i][j];
+            }
+        }
+
+        cloned._E = this._E;
+
+        return cloned;
     }
 }

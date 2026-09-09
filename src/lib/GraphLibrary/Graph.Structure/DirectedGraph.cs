@@ -13,4 +13,12 @@ public class DirectedGraph<T> : WeightedGraph<T> where T : INumber<T>
     public override bool AddEdge(int u, int v) => _representation.AddEdge(u, v);
 
     public override bool RemoveEdge(int u, int v) => _representation.RemoveEdge(u, v);
+
+    public override object Clone()
+    {
+        DirectedGraph<T> cloned = new(this.VertexCount, this._representationType);
+        cloned._representation = (GraphRepresentation<T>) this._representation.Clone();
+
+        return cloned;
+    }
 }

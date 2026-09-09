@@ -98,4 +98,24 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
         
         return _graph[u, v].Item1;
     }
+
+    public override object Clone()
+    {
+        MatrixGraphRepresentation<T> cloned = new(_V);
+
+        for (int i = 0; i < this._V; i++)
+        {
+            cloned._inDegrees[i] = this._inDegrees[i];
+            cloned._outDegrees[i] = this._outDegrees[i];
+
+            for (int j = 0; j < this._V; j++)
+            {
+                cloned._graph[i, j] = this._graph[i, j];
+            }
+        }
+
+        cloned._E = this._E;
+
+        return cloned;
+    }
 }

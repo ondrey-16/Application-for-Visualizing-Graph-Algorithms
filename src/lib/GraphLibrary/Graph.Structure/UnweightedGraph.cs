@@ -3,9 +3,13 @@ namespace AVGA.GraphLibrary;
 public class UnweightedGraph : Graph<short>
 {
     private WeightedGraph<short> _graph;
+    private RepresentationTypeEnum _representationType;
+    private bool _isDirected;
 
     public UnweightedGraph(int V, RepresentationTypeEnum representationType, bool isDirected)
     {
+        _representationType = representationType;
+        _isDirected = isDirected;
         _graph = isDirected 
             ? new DirectedGraph<short>(V, representationType) 
             : new UndirectedGraph<short>(V, representationType);
@@ -13,6 +17,7 @@ public class UnweightedGraph : Graph<short>
 
     public UnweightedGraph(Stream s, RepresentationTypeEnum representationType, bool isDirected)
     {
+        _representationType = representationType;
         _graph = isDirected 
             ? new DirectedGraph<short>(s, representationType) 
             : new UndirectedGraph<short>(s, representationType);
@@ -20,6 +25,8 @@ public class UnweightedGraph : Graph<short>
     public override int EdgeCount => _graph.EdgeCount;
 
     public override int VertexCount => _graph.VertexCount;
+
+    public bool IsDirected => _isDirected;
 
     public override bool AddEdge(int u, int v)
     {
@@ -49,4 +56,14 @@ public class UnweightedGraph : Graph<short>
 
     public override void SetEdgeWeight(int u, int v, short w)
     {}
+
+    public override object Clone()
+    {
+        UnweightedGraph cloned = new (this.VertexCount, this._representationType, this._isDirected);
+        cloned._graph = (_isDirected) 
+            ? (DirectedGraph<short>) this._graph.Clone() 
+            : (UndirectedGraph<short>) this._graph.Clone();
+
+        return cloned;
+    }
 }

@@ -15,4 +15,12 @@ public class UndirectedGraph<T> : WeightedGraph<T> where T : INumber<T>
 
     public override bool RemoveEdge(int u, int v)
         => _representation.RemoveEdge(u, v) && _representation.RemoveEdge(v, u);
+
+    public override object Clone()
+    {
+        UndirectedGraph<T> cloned = new(this.VertexCount, this._representationType);
+        cloned._representation = (GraphRepresentation<T>) this._representation.Clone();
+
+        return cloned;
+    }
 }

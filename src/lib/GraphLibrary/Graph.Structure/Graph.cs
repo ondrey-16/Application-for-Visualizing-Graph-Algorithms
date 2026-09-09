@@ -23,4 +23,6 @@ public abstract class Graph<T> : IGraphMethods<T> where T : INumber<T>
     public abstract void SetEdgeWeight(int u, int v, T w);
 
     public abstract bool HasEdge(int u, int v);
+
+    public abstract object Clone();
 }

@@ -3,9 +3,11 @@ namespace AVGA.GraphLibrary;
 public abstract class WeightedGraph<T> : Graph<T> where T : INumber<T>
 {
     protected GraphRepresentation<T> _representation;
+    protected RepresentationTypeEnum _representationType;
 
     public WeightedGraph(int V, RepresentationTypeEnum representationType)
     {
+        _representationType = representationType;
         _representation = representationType switch
         {
             RepresentationTypeEnum.LIST => new ListGraphRepresentation<T>(V),
@@ -16,6 +18,7 @@ public abstract class WeightedGraph<T> : Graph<T> where T : INumber<T>
 
     public WeightedGraph(Stream s, RepresentationTypeEnum representationType)
     {
+        _representationType = representationType;
         _representation = new ListGraphRepresentation<T>(2);
     }
 
