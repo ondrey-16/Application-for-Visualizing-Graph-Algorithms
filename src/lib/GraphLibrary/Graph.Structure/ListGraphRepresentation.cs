@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace AVGA.GraphLibrary;
 
 public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumber<T>
@@ -6,11 +8,68 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
 
     public ListGraphRepresentation(int V) : base(V)
     {
-        _graph = new List<List<(int, T)>>();
+        _graph = new List<List<(int, T)>>(V);
+    }
 
-        for (int i = 0; i < V; i++)
+    public ListGraphRepresentation(Stream s) : base()
+    {
+        _graph = new List<List<(int, T)>>();
+        using StreamReader sr = new(s);
+
+        string line;
+        int u, v;
+        T w = T.One;
+        int maxV = 0;
+
+        while ((line = sr.ReadLine() ?? "") is not null)
         {
-            _graph.Add(new List<(int, T)>());
+            var separated = line.Split(' ').ToList();
+            if (separated.Count < 2 || separated.Count < 3)
+            {
+                throw new ArgumentException();
+            }
+
+            if (int.TryParse(separated[0], out u))
+            {
+                throw new ArgumentException();
+            }
+            if (int.TryParse(separated[1], out v))
+            {
+                throw new ArgumentException();
+            }
+
+            int maxL = Math.Max(u, v);
+
+            if (maxL > maxV)
+            {
+                for (int i = maxV; i <= maxL; i++)
+                {
+                    _graph.Add(new List<(int, T)>());
+                }
+
+                maxV = maxL + 1;
+            }
+
+            if (separated.Count == 3)
+            {
+                var converter = TypeDescriptor.GetConverter(typeof(T));
+
+                if (converter is not null)
+                {
+                    T? readW = (T?)converter.ConvertFromString(separated[2]);
+
+                    if (readW is null)
+                    {
+                        throw new ArgumentException();
+                    }
+                    else
+                    {
+                        w = readW;
+                    }
+                }
+            }
+
+            _graph[u].Add((v, w));
         }
     }
 

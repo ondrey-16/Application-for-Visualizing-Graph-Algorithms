@@ -4,17 +4,22 @@ public abstract class GraphRepresentation<T> : IGraphMethods<T> where T : INumbe
 {
     protected readonly int _V;
     protected int _E;
-    protected readonly int[] _inDegrees;
-    protected readonly int[] _outDegrees;
+    protected readonly List<int> _inDegrees;
+    protected readonly List<int> _outDegrees;
 
     public int VertexCount => _V;
     public int EdgeCount => _E;
 
-    protected GraphRepresentation(int V)
+    public GraphRepresentation()
+    {
+        _inDegrees = new();
+        _outDegrees = new();
+    }
+    public GraphRepresentation(int V)
     {
         _V = V;
-        _inDegrees = new int[V];
-        _outDegrees = new int[V];
+        _inDegrees = new(V);
+        _outDegrees = new(V);
         _E = 0;
     }
 
