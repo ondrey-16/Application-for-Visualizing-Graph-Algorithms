@@ -3,10 +3,12 @@ namespace AVGA.GraphLibrary;
 public class UndirectedGraph<T> : WeightedGraph<T> where T : INumber<T>
 {
     public UndirectedGraph(int V, RepresentationTypeEnum representationType)
-        : base(V, representationType) {}
+        : base(V, representationType, false)
+    {}
     
     public UndirectedGraph(Stream s, RepresentationTypeEnum representationType)
-        : base(s, representationType) {}
+        : base(s, representationType, false)
+    {}
 
     public override int EdgeCount => _representation.EdgeCount / 2;
 

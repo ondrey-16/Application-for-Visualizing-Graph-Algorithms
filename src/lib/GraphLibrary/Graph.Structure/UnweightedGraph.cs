@@ -3,25 +3,23 @@ namespace AVGA.GraphLibrary;
 public class UnweightedGraph : Graph<short>
 {
     private WeightedGraph<short> _graph;
-    private bool _isDirected;
 
-    public UnweightedGraph(int V, RepresentationTypeEnum representationType, bool isDirected)
+    public UnweightedGraph(int V, RepresentationTypeEnum representationType, bool isDirected) : base(isDirected)
     {
         _representationType = representationType;
-        _isDirected = isDirected;
         _graph = isDirected 
             ? new DirectedGraph<short>(V, representationType) 
             : new UndirectedGraph<short>(V, representationType);
     }
 
-    public UnweightedGraph(Stream s, RepresentationTypeEnum representationType, bool isDirected)
+    public UnweightedGraph(Stream s, RepresentationTypeEnum representationType, bool isDirected) : base(isDirected)
     {
         _representationType = representationType;
         _graph = isDirected 
             ? new DirectedGraph<short>(s, representationType) 
             : new UndirectedGraph<short>(s, representationType);
     }
-    
+
     public override int EdgeCount => _graph.EdgeCount;
 
     public override int VertexCount => _graph.VertexCount;

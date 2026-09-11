@@ -4,7 +4,7 @@ public abstract class WeightedGraph<T> : Graph<T>, IWeightedGraphMethods<T> wher
 {
     protected GraphRepresentation<T> _representation;
 
-    public WeightedGraph(int V, RepresentationTypeEnum representationType)
+    public WeightedGraph(int V, RepresentationTypeEnum representationType, bool isDirected) : base(isDirected)
     {
         _representationType = representationType;
         _representation = representationType switch
@@ -15,13 +15,13 @@ public abstract class WeightedGraph<T> : Graph<T>, IWeightedGraphMethods<T> wher
         };
     }
 
-    public WeightedGraph(Stream s, RepresentationTypeEnum representationType)
+    public WeightedGraph(Stream s, RepresentationTypeEnum representationType, bool isDirected) : base(isDirected)
     {
         _representationType = representationType;
         _representation = representationType switch
         {
-            RepresentationTypeEnum.LIST => new ListGraphRepresentation<T>(s),
-            RepresentationTypeEnum.MATRIX => new MatrixGraphRepresentation<T>(s),
+            RepresentationTypeEnum.LIST => new ListGraphRepresentation<T>(s, _isDirected),
+            RepresentationTypeEnum.MATRIX => new MatrixGraphRepresentation<T>(s, _isDirected),
             _ => throw new InvalidRepresentationTypeException()
         };
     }

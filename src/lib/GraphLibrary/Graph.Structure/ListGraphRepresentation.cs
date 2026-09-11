@@ -9,7 +9,7 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
         _graph = new List<List<(int, T)>>(V);
     }
 
-    public ListGraphRepresentation(Stream s) : base()
+    public ListGraphRepresentation(Stream s, bool isDirected) : base()
     {
         _graph = new List<List<(int, T)>>();
 
@@ -70,9 +70,21 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
                 }
             }
 
+            if (HasEdge(u, v))
+            {
+                throw new ArgumentException();
+            }
+
             _graph[u].Add((v, w));
             _inDegrees[v]++;
             _outDegrees[u]++;
+
+            if (!isDirected)
+            {
+                _graph[v].Add((u, w));
+                _inDegrees[u]++;
+                _outDegrees[v]++;
+            }
         }
     }
 

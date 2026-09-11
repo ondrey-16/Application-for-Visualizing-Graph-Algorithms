@@ -8,7 +8,7 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
     {
         _graph = new (bool, T)[_V,_V];
     }
-    public MatrixGraphRepresentation(Stream s) : base()
+    public MatrixGraphRepresentation(Stream s, bool isDirected) : base()
     {
         _graph = new (bool, T)[_V,_V];
 
@@ -82,9 +82,21 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
                 }
             }
 
+            if (_graph[u, v].Item1)
+            {
+                throw new ArgumentException();
+            }
+
             _graph[u, v] = (true, w);
             _inDegrees[v]++;
             _outDegrees[u]++;
+
+            if (!isDirected)
+            {
+                _graph[v, u] = (true, w);
+                _inDegrees[u]++;
+                _outDegrees[v]++;
+            }
         }
     }
     public override bool AddEdge(int u, int v)

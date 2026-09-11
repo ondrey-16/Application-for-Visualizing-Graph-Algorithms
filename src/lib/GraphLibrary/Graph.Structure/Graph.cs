@@ -3,6 +3,12 @@ namespace AVGA.GraphLibrary;
 public abstract class Graph<T> : IGraphMethods<T> where T : INumber<T>
 {
     protected RepresentationTypeEnum _representationType;
+    protected readonly bool _isDirected;
+
+    public Graph(bool isDirected)
+    {
+        _isDirected = isDirected;
+    }
 
     public abstract int VertexCount { get; }
 
