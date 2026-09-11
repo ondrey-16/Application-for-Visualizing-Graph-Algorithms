@@ -24,6 +24,24 @@ public class UnweightedGraphTests
         Assert.True(graph.HasEdge(0, 1));
         Assert.True(graph.HasEdge(1, 2));
         Assert.True(graph.HasEdge(2, 0));
+
+        var cloned = (UnweightedGraph) graph.Clone();
+
+        Assert.True(graph.HasEdge(0, 1));
+        Assert.True(graph.HasEdge(1, 2));
+        Assert.True(graph.HasEdge(2, 0));
+
+        cloned.ChangeToMatrixRepresentation();
+
+        Assert.True(graph.HasEdge(0, 1));
+        Assert.True(graph.HasEdge(1, 2));
+        Assert.True(graph.HasEdge(2, 0));
+
+        cloned.ChangeToListRepresentation();
+
+        Assert.True(graph.HasEdge(0, 1));
+        Assert.True(graph.HasEdge(1, 2));
+        Assert.True(graph.HasEdge(2, 0));
     }
 
     [Fact]
@@ -51,5 +69,23 @@ public class UnweightedGraphTests
         Assert.True(graph.HasEdge(1, 0));
         Assert.True(graph.HasEdge(2, 1));
         Assert.True(graph.HasEdge(0, 2));
+
+        var cloned = (UnweightedGraph) graph.Clone();
+
+        Assert.True(graph.HasEdge(0, 1));
+        Assert.True(graph.HasEdge(1, 2));
+        Assert.True(graph.HasEdge(2, 0));
+
+        cloned.ChangeToMatrixRepresentation();
+
+        Assert.True(graph.HasEdge(0, 1));
+        Assert.True(graph.HasEdge(1, 2));
+        Assert.True(graph.HasEdge(2, 0));
+
+        cloned.ChangeToListRepresentation();
+
+        Assert.True(graph.HasEdge(0, 1));
+        Assert.True(graph.HasEdge(1, 2));
+        Assert.True(graph.HasEdge(2, 0));
     }
 }

@@ -1,5 +1,9 @@
 namespace AVGA.GraphLibrary;
 
+/// <summary>
+/// Abstract class for graphs representation.
+/// </summary>
+/// <typeparam name="T">Type of edges weights.</typeparam>
 public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphMethods<T> where T : INumber<T>
 {
     protected int _V;
@@ -30,6 +34,7 @@ public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphM
     abstract public IEnumerable<(int, T)> GetOutEdges(int v);
     abstract public void SetEdgeWeight(int u, int v, T w);
     abstract public bool HasEdge(int u, int v);
+    abstract public object Clone();
 
     public int GetInDegree(int v)
     {
@@ -48,7 +53,7 @@ public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphM
     /// Checks if vertex is valid.
     /// </summary>
     /// <param name="v">Vertex</param>
-    /// <exception cref="InvalidVertexException">If vertex is out of range.</exception>
+    /// <exception cref="InvalidVertexException">Thrown if vertex is out of range.</exception>
     protected void CheckVertex(int v)
     {
         if (v < 0 || v >= _V)
@@ -62,7 +67,7 @@ public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphM
     /// </summary>
     /// <param name="u">Start of the edge.</param>
     /// <param name="v">End of the edge.</param>
-    /// <exception cref="InvalidEdgeException">If at least one of the vertices is out of range.</exception>
+    /// <exception cref="InvalidEdgeException">Thrown if at least one of the vertices is out of range.</exception>
     protected void CheckEdge(int u, int v)
     {
         if (u < 0 || u >= _V || v < 0 || v >= _V)
@@ -70,6 +75,4 @@ public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphM
             throw new InvalidEdgeException(u, v, _V);
         }
     }
-
-    public abstract object Clone();
 }

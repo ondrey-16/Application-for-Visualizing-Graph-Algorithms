@@ -1,8 +1,12 @@
 namespace AVGA.GraphLibrary;
 
+/// <summary>
+/// Adapter on Graph class with edges weights represented by short int type variables, used to operate on unweighted graphs.
+/// </summary>
 public class UnweightedGraph : Graph<short>
 {
     private WeightedGraph<short> _graph;
+
 
     public UnweightedGraph(int V, RepresentationTypeEnum representationType, bool isDirected) : base(isDirected)
     {

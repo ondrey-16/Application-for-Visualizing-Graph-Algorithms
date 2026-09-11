@@ -1,8 +1,13 @@
 namespace AVGA.GraphLibrary;
 
+/// <summary>
+/// Abstract class for weighted graphs objects.
+/// </summary>
+/// <typeparam name="T">Type of edges weights.</typeparam>
 public abstract class WeightedGraph<T> : Graph<T>, IWeightedGraphMethods<T> where T : INumber<T>
 {
     protected GraphRepresentation<T> _representation;
+
 
     public WeightedGraph(int V, RepresentationTypeEnum representationType, bool isDirected) : base(isDirected)
     {
@@ -14,7 +19,6 @@ public abstract class WeightedGraph<T> : Graph<T>, IWeightedGraphMethods<T> wher
             _ => throw new InvalidRepresentationTypeException()
         };
     }
-
     public WeightedGraph(Stream s, RepresentationTypeEnum representationType, bool isDirected) : base(isDirected)
     {
         _representationType = representationType;
@@ -71,6 +75,10 @@ public abstract class WeightedGraph<T> : Graph<T>, IWeightedGraphMethods<T> wher
         _representation = newRepresentation;
     }
 
+    /// <summary>
+    /// Copies the edges with their weight to a new instance of graph representation.
+    /// </summary>
+    /// <param name="newRepresentation">An object of new graph representation.</param>
     private void CopyEdgesToNewRepresentation(GraphRepresentation<T> newRepresentation)
     {
         for (int i = 0; i < VertexCount; i++)

@@ -1,5 +1,9 @@
 namespace AVGA.GraphLibrary;
 
+/// <summary>
+/// Class representing a directed graph.
+/// </summary>
+/// <typeparam name="T">Type of edges weights.</typeparam>
 public class DirectedGraph<T> : WeightedGraph<T> where T : INumber<T>
 {
     public DirectedGraph(int V, RepresentationTypeEnum representationType)

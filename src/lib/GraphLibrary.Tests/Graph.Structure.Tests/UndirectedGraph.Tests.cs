@@ -27,5 +27,23 @@ public class UndirectedGraphTests
         Assert.True(graph.GetEdgeWeight(2, 1) == 2);
         Assert.True(graph.GetEdgeWeight(2, 0) == 1);
         Assert.True(graph.GetEdgeWeight(0, 2) == 1);
+
+        var cloned = (UndirectedGraph<int>) graph.Clone();
+
+        Assert.True(cloned.GetEdgeWeight(0, 1) == 3);
+        Assert.True(cloned.GetEdgeWeight(1, 2) == 2);
+        Assert.True(cloned.GetEdgeWeight(2, 0) == 1);
+
+        cloned.ChangeToMatrixRepresentation();
+
+        Assert.True(cloned.GetEdgeWeight(0, 1) == 3);
+        Assert.True(cloned.GetEdgeWeight(1, 2) == 2);
+        Assert.True(cloned.GetEdgeWeight(2, 0) == 1);
+
+        cloned.ChangeToListRepresentation();
+
+        Assert.True(cloned.GetEdgeWeight(0, 1) == 3);
+        Assert.True(cloned.GetEdgeWeight(1, 2) == 2);
+        Assert.True(cloned.GetEdgeWeight(2, 0) == 1);
     }
 }

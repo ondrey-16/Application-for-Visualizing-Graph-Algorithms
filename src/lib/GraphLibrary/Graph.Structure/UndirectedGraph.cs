@@ -1,5 +1,9 @@
 namespace AVGA.GraphLibrary;
 
+/// <summary>
+/// Class representing a undirected graph.
+/// </summary>
+/// <typeparam name="T">Type of edges weights.</typeparam>
 public class UndirectedGraph<T> : WeightedGraph<T> where T : INumber<T>
 {
     public UndirectedGraph(int V, RepresentationTypeEnum representationType)

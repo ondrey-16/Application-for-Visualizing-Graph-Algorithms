@@ -1,16 +1,21 @@
 namespace AVGA.GraphLibrary;
 
+/// <summary>
+/// Representation of graphs operating on adjacency matrix.
+/// </summary>
+/// <typeparam name="T">Type of edges weights.</typeparam>
 public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INumber<T>
 {
-    private readonly (bool, T)[,] _graph;
+    private readonly (bool, T)[,] _adjacencyMatrix;
+
 
     public MatrixGraphRepresentation(int V) : base(V)
     {
-        _graph = new (bool, T)[_V,_V];
+        _adjacencyMatrix = new (bool, T)[_V,_V];
     }
     public MatrixGraphRepresentation(Stream s, bool isDirected) : base()
     {
-        _graph = new (bool, T)[_V,_V];
+        _adjacencyMatrix = new (bool, T)[_V,_V];
 
         string? line;
         int u, v;
@@ -21,7 +26,7 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
 
         while ((line = sr1.ReadLine()) is not null)
         {
-            var separated = line.Split(' ').ToList();
+            var separated = line.Split( ).ToList();
             if (separated.Count < 2 || separated.Count > 3)
             {
                 throw new ArgumentException();
@@ -50,14 +55,14 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
             }
         }
 
-        _graph = new (bool, T)[maxV, maxV];
+        _adjacencyMatrix = new (bool, T)[maxV, maxV];
 
         s.Position = 0;
         using StreamReader sr2 = new(s);
 
         while ((line = sr2.ReadLine()) is not null)
         {
-            var separated = line.Split(' ').ToList();
+            var separated = line.Split( ).ToList();
 
             int.TryParse(separated[0], out u);
             int.TryParse(separated[1], out v);
@@ -83,19 +88,19 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
                 }
             }
 
-            if (_graph[u, v].Item1)
+            if (_adjacencyMatrix[u, v].Item1)
             {
                 throw new ArgumentException();
             }
 
-            _graph[u, v] = (true, w);
+            _adjacencyMatrix[u, v] = (true, w);
             _inDegrees[v]++;
             _outDegrees[u]++;
             _E++;
 
             if (!isDirected)
             {
-                _graph[v, u] = (true, w);
+                _adjacencyMatrix[v, u] = (true, w);
                 _inDegrees[u]++;
                 _outDegrees[v]++;
                 _E++;
@@ -108,9 +113,9 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
     {
         CheckEdge(u, v);
 
-        if (!_graph[u, v].Item1)
+        if (!_adjacencyMatrix[u, v].Item1)
         {
-            _graph[u, v] = (true, T.Zero);
+            _adjacencyMatrix[u, v] = (true, T.Zero);
             _E++;
             _inDegrees[v]++;
             _outDegrees[u]++;
@@ -125,9 +130,9 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
     {
         CheckEdge(u, v);
 
-        if (_graph[u, v].Item1)
+        if (_adjacencyMatrix[u, v].Item1)
         {
-            _graph[u, v].Item1 = false;
+            _adjacencyMatrix[u, v].Item1 = false;
             _E--;
             _inDegrees[v]--;
             _outDegrees[u]--;
@@ -142,9 +147,9 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
     {
         CheckEdge(u, v);
 
-        if (_graph[u, v].Item1)
+        if (_adjacencyMatrix[u, v].Item1)
         {
-            return _graph[u, v].Item2;
+            return _adjacencyMatrix[u, v].Item2;
         }
 
         throw new NonExistingEdgeException(u, v);
@@ -156,7 +161,7 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
 
         for (int i = 0; i < _V; i++)
         {
-            if (_graph[v, i].Item1)
+            if (_adjacencyMatrix[v, i].Item1)
             {
                 yield return i;
             }
@@ -169,9 +174,9 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
 
         for (int i = 0; i < _V; i++)
         {
-            if (_graph[v, i].Item1)
+            if (_adjacencyMatrix[v, i].Item1)
             {
-                yield return (i, _graph[v, i].Item2);
+                yield return (i, _adjacencyMatrix[v, i].Item2);
             }
         }
     }
@@ -180,12 +185,12 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
     {
         CheckEdge(u, v);
 
-        if (!_graph[u, v].Item1)
+        if (!_adjacencyMatrix[u, v].Item1)
         {
             throw new NonExistingEdgeException(u, v);
         }
 
-        _graph[u, v].Item2 = w;
+        _adjacencyMatrix[u, v].Item2 = w;
     }
 
     public override bool HasEdge(int u, int v)
@@ -199,7 +204,7 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
             return false;
         }
         
-        return _graph[u, v].Item1;
+        return _adjacencyMatrix[u, v].Item1;
     }
 
     public override object Clone()
@@ -213,7 +218,7 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
 
             for (int j = 0; j < this._V; j++)
             {
-                cloned._graph[i, j] = this._graph[i, j];
+                cloned._adjacencyMatrix[i, j] = this._adjacencyMatrix[i, j];
             }
         }
 
