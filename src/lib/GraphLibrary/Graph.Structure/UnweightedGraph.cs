@@ -39,8 +39,6 @@ public class UnweightedGraph : Graph<short>
         return res;
     }
 
-    public override short GetEdgeWeight(int u, int v) => _graph.GetEdgeWeight(u, v);
-
     public override int GetInDegree(int v) => _graph.GetInDegree(v);
 
     public override IEnumerable<int> GetNeighbours(int v) => _graph.GetNeighbours(v);
@@ -53,13 +51,10 @@ public class UnweightedGraph : Graph<short>
 
     public override bool RemoveEdge(int u, int v) => _graph.RemoveEdge(u, v);
 
-    public override void SetEdgeWeight(int u, int v, short w)
-    {}
-
     public override object Clone()
     {
         UnweightedGraph cloned = new (this.VertexCount, this._representationType, this._isDirected);
-        cloned._graph = (_isDirected) 
+        cloned._graph = _isDirected 
             ? (DirectedGraph<short>) this._graph.Clone() 
             : (UndirectedGraph<short>) this._graph.Clone();
 

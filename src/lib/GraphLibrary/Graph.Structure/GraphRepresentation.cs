@@ -1,6 +1,6 @@
 namespace AVGA.GraphLibrary;
 
-public abstract class GraphRepresentation<T> : IGraphMethods<T> where T : INumber<T>
+public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphMethods<T> where T : INumber<T>
 {
     protected readonly int _V;
     protected int _E;

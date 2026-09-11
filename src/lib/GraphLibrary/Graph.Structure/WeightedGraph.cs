@@ -1,6 +1,6 @@
 namespace AVGA.GraphLibrary;
 
-public abstract class WeightedGraph<T> : Graph<T> where T : INumber<T>
+public abstract class WeightedGraph<T> : Graph<T>, IWeightedGraphMethods<T> where T : INumber<T>
 {
     protected GraphRepresentation<T> _representation;
 
@@ -23,7 +23,7 @@ public abstract class WeightedGraph<T> : Graph<T> where T : INumber<T>
 
     public override int VertexCount => _representation.VertexCount;
 
-    public override T GetEdgeWeight(int u, int v) => _representation.GetEdgeWeight(u, v);
+    public T GetEdgeWeight(int u, int v) => _representation.GetEdgeWeight(u, v);
 
     public override int GetInDegree(int v) => _representation.GetInDegree(v);
 
@@ -35,9 +35,35 @@ public abstract class WeightedGraph<T> : Graph<T> where T : INumber<T>
 
     public override bool HasEdge(int u, int v) => _representation.HasEdge(u, v);
 
-    public override void SetEdgeWeight(int u, int v, T w)
+    public void SetEdgeWeight(int u, int v, T w)
     {
         _representation.SetEdgeWeight(u, v, w);
+    }
+
+    public override void ChangeToMatrixRepresentation()
+    {
+        if (_representationType == RepresentationTypeEnum.MATRIX)
+        {
+            return;
+        }
+
+        MatrixGraphRepresentation<T> newRepresentation = new(VertexCount);
+        CopyEdgesToNewRepresentation(newRepresentation);
+        
+        _representation = newRepresentation;
+    }
+
+    public override void ChangeToListRepresentation()
+    {
+        if (_representationType == RepresentationTypeEnum.LIST)
+        {
+            return;
+        }
+
+        ListGraphRepresentation<T> newRepresentation = new(VertexCount);
+        CopyEdgesToNewRepresentation(newRepresentation);
+        
+        _representation = newRepresentation;
     }
 
     private void CopyEdgesToNewRepresentation(GraphRepresentation<T> newRepresentation)
@@ -52,21 +78,5 @@ public abstract class WeightedGraph<T> : Graph<T> where T : INumber<T>
                 newRepresentation.SetEdgeWeight(i, edge.Item1, edge.Item2);
             }
         }
-    }
-
-    public override void ChangeToMatrixRepresentation()
-    {
-        MatrixGraphRepresentation<T> newRepresentation = new(VertexCount);
-        CopyEdgesToNewRepresentation(newRepresentation);
-        
-        _representation = newRepresentation;
-    }
-
-    public override void ChangeToListRepresentation()
-    {
-        ListGraphRepresentation<T> newRepresentation = new(VertexCount);
-        CopyEdgesToNewRepresentation(newRepresentation);
-        
-        _representation = newRepresentation;
     }
 }

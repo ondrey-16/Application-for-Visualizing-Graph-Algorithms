@@ -33,19 +33,10 @@ public interface IGraphMethods<T> : ICloneable where T : INumber<T>
     public bool RemoveEdge(int u, int v);
 
     /// <summary>
-    /// Returns a weight of the edge if exists.
-    /// </summary>
-    /// <param name="u">Start of the edge.</param>
-    /// <param name="v">End of the edge.</param>
-    /// <returns>Weight of the edge</returns>
-    public T GetEdgeWeight(int u, int v);
-
-    /// <summary>
     /// Returns a count of incoming edges of vertex.
     /// </summary>
     /// <param name="v">Vertex</param>
     /// <returns>Count of incoming edges of vertex.</returns>
-    /// 
     public int GetInDegree(int v);
 
     /// <summary>
@@ -68,13 +59,6 @@ public interface IGraphMethods<T> : ICloneable where T : INumber<T>
     /// <param name="v">Vertex</param>
     /// <returns>Collection of neighbours of the vertex.</returns>
     public IEnumerable<(int, T)> GetOutEdges(int v);
-
-    /// <summary>
-    /// Sets edge's weight if exists.
-    /// </summary>
-    /// <param name="v">Vertex</param>
-    /// <param name="w">Weight of the edge</param>
-    public void SetEdgeWeight(int u, int v, T w);
 
     /// <summary>
     /// Returns information if edge exists.
