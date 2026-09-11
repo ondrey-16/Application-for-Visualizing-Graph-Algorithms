@@ -21,6 +21,7 @@ public class UnweightedGraph : Graph<short>
             ? new DirectedGraph<short>(s, representationType) 
             : new UndirectedGraph<short>(s, representationType);
     }
+    
     public override int EdgeCount => _graph.EdgeCount;
 
     public override int VertexCount => _graph.VertexCount;

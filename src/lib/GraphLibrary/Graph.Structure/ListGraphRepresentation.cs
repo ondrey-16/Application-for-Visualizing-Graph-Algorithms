@@ -1,5 +1,3 @@
-using System.ComponentModel;
-
 namespace AVGA.GraphLibrary;
 
 public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumber<T>
@@ -14,12 +12,13 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
     public ListGraphRepresentation(Stream s) : base()
     {
         _graph = new List<List<(int, T)>>();
-        using StreamReader sr = new(s);
 
         string line;
         int u, v;
         T w = T.One;
         int maxV = 0;
+
+        using StreamReader sr = new(s);
 
         while ((line = sr.ReadLine() ?? "") is not null)
         {
@@ -45,6 +44,8 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
                 for (int i = maxV; i <= maxL; i++)
                 {
                     _graph.Add(new List<(int, T)>());
+                    _inDegrees.Add(0);
+                    _outDegrees.Add(0);
                 }
 
                 maxV = maxL + 1;
@@ -70,6 +71,8 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
             }
 
             _graph[u].Add((v, w));
+            _inDegrees[v]++;
+            _outDegrees[u]++;
         }
     }
 

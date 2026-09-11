@@ -18,7 +18,12 @@ public abstract class WeightedGraph<T> : Graph<T>, IWeightedGraphMethods<T> wher
     public WeightedGraph(Stream s, RepresentationTypeEnum representationType)
     {
         _representationType = representationType;
-        _representation = new ListGraphRepresentation<T>(2);
+        _representation = representationType switch
+        {
+            RepresentationTypeEnum.LIST => new ListGraphRepresentation<T>(s),
+            RepresentationTypeEnum.MATRIX => new MatrixGraphRepresentation<T>(s),
+            _ => throw new InvalidRepresentationTypeException()
+        };
     }
 
     public override int VertexCount => _representation.VertexCount;

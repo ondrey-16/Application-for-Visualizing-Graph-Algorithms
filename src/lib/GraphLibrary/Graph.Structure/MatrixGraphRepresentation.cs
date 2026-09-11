@@ -8,6 +8,85 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
     {
         _graph = new (bool, T)[_V,_V];
     }
+    public MatrixGraphRepresentation(Stream s) : base()
+    {
+        _graph = new (bool, T)[_V,_V];
+
+        string line;
+        int u, v;
+        T w = T.One;
+        int maxV = 0;
+
+        using StreamReader sr1 = new(s);
+
+        while ((line = sr1.ReadLine() ?? "") is not null)
+        {
+            var separated = line.Split(' ').ToList();
+            if (separated.Count < 2 || separated.Count < 3)
+            {
+                throw new ArgumentException();
+            }
+
+            if (int.TryParse(separated[0], out u))
+            {
+                throw new ArgumentException();
+            }
+            if (int.TryParse(separated[1], out v))
+            {
+                throw new ArgumentException();
+            }
+
+            int maxL = Math.Max(u, v);
+
+            if (maxL > maxV)
+            {
+                for (int i = maxV; i <= maxL; i++)
+                {
+                    _inDegrees.Add(0);
+                    _outDegrees.Add(0);
+                }
+
+                maxV = maxL + 1;
+            }
+        }
+
+        _graph = new (bool, T)[maxV, maxV];
+
+        using StreamReader sr2 = new(s);
+
+        while ((line = sr2.ReadLine() ?? "") is not null)
+        {
+            var separated = line.Split(' ').ToList();
+
+            int.TryParse(separated[0], out u);
+            int.TryParse(separated[1], out v);
+
+            int maxL = Math.Max(u, v);
+
+            if (separated.Count == 3)
+            {
+                var converter = TypeDescriptor.GetConverter(typeof(T));
+
+                if (converter is not null)
+                {
+                    T? readW = (T?)converter.ConvertFromString(separated[2]);
+
+                    if (readW is null)
+                    {
+                        throw new ArgumentException();
+                    }
+                    else
+                    {
+                        w = readW;
+                    }
+                }
+            }
+
+            _graph[u, v] = (true, w);
+            _inDegrees[v]++;
+            _outDegrees[u]++;
+        }
+    }
     public override bool AddEdge(int u, int v)
     {
         CheckEdge(u, v);
