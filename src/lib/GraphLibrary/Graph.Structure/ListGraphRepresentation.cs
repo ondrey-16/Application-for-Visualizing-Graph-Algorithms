@@ -6,40 +6,40 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
 
     public ListGraphRepresentation(int V) : base(V)
     {
-        _graph = new List<List<(int, T)>>(V);
+        _graph = Enumerable.Range(0, V).Select(_ => new List<(int, T)>()).ToList();
     }
 
     public ListGraphRepresentation(Stream s, bool isDirected) : base()
     {
         _graph = new List<List<(int, T)>>();
 
-        string line;
+        string? line;
         int u, v;
         T w = T.One;
         int maxV = 0;
 
         using StreamReader sr = new(s);
 
-        while ((line = sr.ReadLine() ?? "") is not null)
+        while ((line = sr.ReadLine()) is not null)
         {
             var separated = line.Split(' ').ToList();
-            if (separated.Count < 2 || separated.Count < 3)
+            if (separated.Count < 2 || separated.Count > 3)
             {
                 throw new ArgumentException();
             }
 
-            if (int.TryParse(separated[0], out u))
+            if (!int.TryParse(separated[0], out u))
             {
                 throw new ArgumentException();
             }
-            if (int.TryParse(separated[1], out v))
+            if (!int.TryParse(separated[1], out v))
             {
                 throw new ArgumentException();
             }
 
             int maxL = Math.Max(u, v);
 
-            if (maxL > maxV)
+            if (maxL >= maxV)
             {
                 for (int i = maxV; i <= maxL; i++)
                 {
@@ -63,10 +63,8 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
                     {
                         throw new ArgumentException();
                     }
-                    else
-                    {
-                        w = readW;
-                    }
+                    
+                    w = readW;
                 }
             }
 
@@ -78,14 +76,18 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
             _graph[u].Add((v, w));
             _inDegrees[v]++;
             _outDegrees[u]++;
+            _E++;
 
             if (!isDirected)
             {
                 _graph[v].Add((u, w));
                 _inDegrees[u]++;
                 _outDegrees[v]++;
+                _E++;
             }
         }
+
+        _V = maxV;
     }
 
     public override bool AddEdge(int u, int v)
@@ -169,7 +171,14 @@ public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumb
 
     public override bool HasEdge(int u, int v)
     {
-        CheckEdge(u, v);
+        try
+        {
+            CheckEdge(u, v);
+        }
+        catch (InvalidEdgeException)
+        {
+            return false;
+        }
         
         return _graph[u].Any(e => e.Item1 == v);
     }

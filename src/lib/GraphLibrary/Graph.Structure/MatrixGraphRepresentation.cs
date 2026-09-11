@@ -12,33 +12,33 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
     {
         _graph = new (bool, T)[_V,_V];
 
-        string line;
+        string? line;
         int u, v;
         T w = T.One;
         int maxV = 0;
 
         using StreamReader sr1 = new(s);
 
-        while ((line = sr1.ReadLine() ?? "") is not null)
+        while ((line = sr1.ReadLine()) is not null)
         {
             var separated = line.Split(' ').ToList();
-            if (separated.Count < 2 || separated.Count < 3)
+            if (separated.Count < 2 || separated.Count > 3)
             {
                 throw new ArgumentException();
             }
 
-            if (int.TryParse(separated[0], out u))
+            if (!int.TryParse(separated[0], out u))
             {
                 throw new ArgumentException();
             }
-            if (int.TryParse(separated[1], out v))
+            if (!int.TryParse(separated[1], out v))
             {
                 throw new ArgumentException();
             }
 
             int maxL = Math.Max(u, v);
 
-            if (maxL > maxV)
+            if (maxL >= maxV)
             {
                 for (int i = maxV; i <= maxL; i++)
                 {
@@ -52,9 +52,10 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
 
         _graph = new (bool, T)[maxV, maxV];
 
+        s.Position = 0;
         using StreamReader sr2 = new(s);
 
-        while ((line = sr2.ReadLine() ?? "") is not null)
+        while ((line = sr2.ReadLine()) is not null)
         {
             var separated = line.Split(' ').ToList();
 
@@ -90,14 +91,18 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
             _graph[u, v] = (true, w);
             _inDegrees[v]++;
             _outDegrees[u]++;
+            _E++;
 
             if (!isDirected)
             {
                 _graph[v, u] = (true, w);
                 _inDegrees[u]++;
                 _outDegrees[v]++;
+                _E++;
             }
         }
+
+        _V = maxV;
     }
     public override bool AddEdge(int u, int v)
     {
@@ -185,7 +190,14 @@ public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INu
 
     public override bool HasEdge(int u, int v)
     {
-        CheckEdge(u, v);
+        try
+        {
+            CheckEdge(u, v);
+        }
+        catch (InvalidEdgeException)
+        {
+            return false;
+        }
         
         return _graph[u, v].Item1;
     }

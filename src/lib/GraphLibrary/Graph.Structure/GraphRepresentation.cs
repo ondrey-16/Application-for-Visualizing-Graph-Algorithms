@@ -2,7 +2,7 @@ namespace AVGA.GraphLibrary;
 
 public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphMethods<T> where T : INumber<T>
 {
-    protected readonly int _V;
+    protected int _V;
     protected int _E;
     protected readonly List<int> _inDegrees;
     protected readonly List<int> _outDegrees;
@@ -18,8 +18,8 @@ public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphM
     public GraphRepresentation(int V)
     {
         _V = V;
-        _inDegrees = new(V);
-        _outDegrees = new(V);
+        _inDegrees = Enumerable.Repeat(0, V).ToList();
+        _outDegrees = Enumerable.Repeat(0, V).ToList();
         _E = 0;
     }
 
