@@ -1,10 +1,10 @@
 namespace AVGA.GraphLibrary;
 
 /// <summary>
-/// Interface of methods necessary to operate on graph's representations.
+/// Interface of methods necessary to operate on graphs and their representations.
 /// </summary>
 /// <typeparam name="T">Type of edges' weights.</typeparam>
-public interface IGraphRepresentation<T>
+public interface IGraphMethods<T> : ICloneable where T : INumber<T>
 {
     /// <summary>
     /// Count of vertices building the graph.
@@ -21,9 +21,8 @@ public interface IGraphRepresentation<T>
     /// </summary>
     /// <param name="u">Start of the edge.</param>
     /// <param name="v">End of the edge.</param>
-    /// <param name="w">Weight of the edge</param>
     /// <returns>If edge added successfully.</returns>
-    public bool AddEdge(int u, int v, T w);
+    public bool AddEdge(int u, int v);
 
     /// <summary>
     /// Removes the edge if exists.
@@ -34,19 +33,10 @@ public interface IGraphRepresentation<T>
     public bool RemoveEdge(int u, int v);
 
     /// <summary>
-    /// Returns a weight of the edge if exists.
-    /// </summary>
-    /// <param name="u">Start of the edge.</param>
-    /// <param name="v">End of the edge.</param>
-    /// <returns>Weight of the edge</returns>
-    public T GetEdgeWeight(int u, int v);
-
-    /// <summary>
     /// Returns a count of incoming edges of vertex.
     /// </summary>
     /// <param name="v">Vertex</param>
     /// <returns>Count of incoming edges of vertex.</returns>
-    /// 
     public int GetInDegree(int v);
 
     /// <summary>
@@ -70,11 +60,6 @@ public interface IGraphRepresentation<T>
     /// <returns>Collection of neighbours of the vertex.</returns>
     public IEnumerable<(int, T)> GetOutEdges(int v);
 
-    /// <summary>
-    /// Sets edge's weight if exists.
-    /// </summary>
-    /// <param name="v">Vertex</param>
-    public void SetEdgeWeight(int u, int v, T w);
     /// <summary>
     /// Returns information if edge exists.
     /// </summary>
