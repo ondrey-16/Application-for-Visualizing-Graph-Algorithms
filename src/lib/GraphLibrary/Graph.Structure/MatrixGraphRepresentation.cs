@@ -1,7 +1,178 @@
 namespace AVGA.GraphLibrary;
 
 /// <summary>
-/// Representation of graphs operating on adjacency matrix.
+/// Representation of unweighted graphs operating on adjacency matrix.
+/// </summary>
+public class MatrixGraphRepresentation : GraphRepresentation
+{
+    private readonly bool[,] _adjacencyMatrix;
+
+
+    public MatrixGraphRepresentation(int V) : base(V)
+    {
+        _adjacencyMatrix = new bool[_V,_V];
+    }
+    public MatrixGraphRepresentation(Stream s, bool isDirected) : base()
+    {
+        _adjacencyMatrix = new bool[_V,_V];
+
+        string? line;
+        int u, v;
+        int maxV = 0;
+
+        using StreamReader sr1 = new(s);
+
+        while ((line = sr1.ReadLine()) is not null)
+        {
+            var separated = line.Split( ).ToList();
+            if (separated.Count != 2)
+            {
+                throw new ArgumentException();
+            }
+
+            if (!int.TryParse(separated[0], out u))
+            {
+                throw new ArgumentException();
+            }
+            if (!int.TryParse(separated[1], out v))
+            {
+                throw new ArgumentException();
+            }
+
+            int maxL = Math.Max(u, v);
+
+            if (maxL >= maxV)
+            {
+                for (int i = maxV; i <= maxL; i++)
+                {
+                    _inDegrees.Add(0);
+                    _outDegrees.Add(0);
+                }
+
+                maxV = maxL + 1;
+            }
+        }
+
+        _adjacencyMatrix = new bool[maxV, maxV];
+
+        s.Position = 0;
+        using StreamReader sr2 = new(s);
+
+        while ((line = sr2.ReadLine()) is not null)
+        {
+            var separated = line.Split( ).ToList();
+
+            int.TryParse(separated[0], out u);
+            int.TryParse(separated[1], out v);
+
+            int maxL = Math.Max(u, v);
+
+            if (_adjacencyMatrix[u, v])
+            {
+                throw new ArgumentException();
+            }
+
+            _adjacencyMatrix[u, v] = true;
+            _inDegrees[v]++;
+            _outDegrees[u]++;
+            _E++;
+
+            if (!isDirected)
+            {
+                _adjacencyMatrix[v, u] = true;
+                _inDegrees[u]++;
+                _outDegrees[v]++;
+                _E++;
+            }
+        }
+
+        _V = maxV;
+    }
+    public override bool AddEdge(int u, int v)
+    {
+        CheckEdge(u, v);
+
+        if (!_adjacencyMatrix[u, v])
+        {
+            _adjacencyMatrix[u, v] = true;
+            _E++;
+            _inDegrees[v]++;
+            _outDegrees[u]++;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public override bool RemoveEdge(int u, int v)
+    {
+        CheckEdge(u, v);
+
+        if (_adjacencyMatrix[u, v])
+        {
+            _adjacencyMatrix[u, v] = false;
+            _E--;
+            _inDegrees[v]--;
+            _outDegrees[u]--;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public override IEnumerable<int> GetNeighbours(int v)
+    {
+        CheckVertex(v);
+
+        for (int i = 0; i < _V; i++)
+        {
+            if (_adjacencyMatrix[v, i])
+            {
+                yield return i;
+            }
+        }
+    }
+
+    public override bool HasEdge(int u, int v)
+    {
+        try
+        {
+            CheckEdge(u, v);
+        }
+        catch (InvalidEdgeException)
+        {
+            return false;
+        }
+        
+        return _adjacencyMatrix[u, v];
+    }
+
+    public override object Clone()
+    {
+        MatrixGraphRepresentation cloned = new(_V);
+
+        for (int i = 0; i < this._V; i++)
+        {
+            cloned._inDegrees[i] = this._inDegrees[i];
+            cloned._outDegrees[i] = this._outDegrees[i];
+
+            for (int j = 0; j < this._V; j++)
+            {
+                cloned._adjacencyMatrix[i, j] = this._adjacencyMatrix[i, j];
+            }
+        }
+
+        cloned._E = this._E;
+
+        return cloned;
+    }
+}
+
+
+/// <summary>
+/// Representation of weighted graphs operating on adjacency matrix.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
 public class MatrixGraphRepresentation<T> : GraphRepresentation<T> where T : INumber<T>

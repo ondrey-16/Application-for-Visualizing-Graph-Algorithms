@@ -1,9 +1,9 @@
 namespace AVGA.GraphLibrary.Tests;
 
-public class DirectedGraphTests
+public class UndirectedGraphTests
 {
     [Fact]
-    public void ReadingStream_ForUnweightedDirectedGraph_ValidStructure_AndChangingRepresentation()
+    public void ReadingStream_ForUnweightedGraph_ValidStructure_AndChangingRepresentation()
     {
         string s = """
         0 1
@@ -17,16 +17,19 @@ public class DirectedGraphTests
         sw.Flush();
         ms.Position = 0;
 
-        var graph = new DirectedGraph(ms, RepresentationTypeEnum.LIST);
+        var graph = new Graph(ms, RepresentationTypeEnum.LIST);
 
         Assert.True(graph.VertexCount == 3);
         Assert.True(graph.EdgeCount == 3);
 
-        var cloned = (DirectedGraph) graph.Clone();
+        var cloned = (Graph) graph.Clone();
 
         Assert.True(cloned.HasEdge(0, 1));
+        Assert.True(cloned.HasEdge(1, 0));
         Assert.True(cloned.HasEdge(1, 2));
+        Assert.True(cloned.HasEdge(2, 1));
         Assert.True(cloned.HasEdge(2, 0));
+        Assert.True(cloned.HasEdge(0, 2));
 
         cloned.ChangeToMatrixRepresentation();
 
@@ -42,7 +45,7 @@ public class DirectedGraphTests
     }
 
     [Fact]
-    public void ReadingStream_ForWeightedDirectedGraph_ValidStructure_AndChangingRepresentation()
+    public void ReadingStream_ForWeightedGraph_ValidStructure_AndChangingRepresentation()
     {
         string s = """
         0 1 3
@@ -56,15 +59,18 @@ public class DirectedGraphTests
         sw.Flush();
         ms.Position = 0;
 
-        var graph = new DirectedGraph<int>(ms, RepresentationTypeEnum.LIST);
+        var graph = new Graph<int>(ms, RepresentationTypeEnum.LIST);
 
         Assert.True(graph.VertexCount == 3);
         Assert.True(graph.EdgeCount == 3);
         Assert.True(graph.GetEdgeWeight(0, 1) == 3);
+        Assert.True(graph.GetEdgeWeight(1, 0) == 3);
         Assert.True(graph.GetEdgeWeight(1, 2) == 2);
+        Assert.True(graph.GetEdgeWeight(2, 1) == 2);
         Assert.True(graph.GetEdgeWeight(2, 0) == 1);
+        Assert.True(graph.GetEdgeWeight(0, 2) == 1);
 
-        var cloned = (DirectedGraph<int>) graph.Clone();
+        var cloned = (Graph<int>) graph.Clone();
 
         Assert.True(cloned.GetEdgeWeight(0, 1) == 3);
         Assert.True(cloned.GetEdgeWeight(1, 2) == 2);
