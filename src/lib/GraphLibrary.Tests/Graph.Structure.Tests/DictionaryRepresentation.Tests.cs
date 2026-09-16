@@ -1,11 +1,11 @@
 namespace AVGA.GraphLibrary.Tests;
 
-public class ListGraphRepresentationTests
+public class DictionaryRepresentationTests
 {
     [Fact]
     public void AddEdge_IncreasesEdgeCountValue()
     {
-        var graph = new ListGraphRepresentation<int>(2);
+        var graph = new DictionaryRepresentation<int>(2);
 
         Assert.True(graph.EdgeCount.Equals(0));
         Assert.True(graph.AddEdge(0, 1));
@@ -17,25 +17,16 @@ public class ListGraphRepresentationTests
     [Fact]
     public void AddEdge_FalseAfterAddingExistingEdge()
     {
-        var graph = new ListGraphRepresentation<int>(2);
+        var graph = new DictionaryRepresentation<int>(2);
 
         Assert.True(graph.AddEdge(0, 1));
         Assert.False(graph.AddEdge(0, 1));
     }
 
     [Fact]
-    public void AddEdge_ThrowsExceptionAfterAddingWrongEdge()
-    {
-        var graph = new ListGraphRepresentation<int>(2);
-
-        Assert.Throws<InvalidEdgeException>(() => graph.AddEdge(0, -1));
-        Assert.Throws<InvalidEdgeException>(() => graph.AddEdge(3, 1));
-    }
-
-    [Fact]
     public void RemoveEdge_DecreasesEdgeCountValue()
     {
-        var graph = new ListGraphRepresentation<int>(2);
+        var graph = new DictionaryRepresentation<int>(2);
 
         Assert.True(graph.EdgeCount.Equals(0));
         Assert.True(graph.AddEdge(0, 1));
@@ -47,25 +38,16 @@ public class ListGraphRepresentationTests
     [Fact]
     public void AddEdge_FalseAfterRemovingNonExistingEdge()
     {
-        var graph = new ListGraphRepresentation<int>(2);
+        var graph = new DictionaryRepresentation<int>(2);
 
         Assert.False(graph.RemoveEdge(0, 1));
     }
 
     [Fact]
-    public void AddEdge_ThrowsExceptionAfterRemovingWrongEdge()
-    {
-        var graph = new ListGraphRepresentation<int>(2);
-
-        Assert.Throws<InvalidEdgeException>(() => graph.RemoveEdge(0, -1));
-        Assert.Throws<InvalidEdgeException>(() => graph.RemoveEdge(3, 1));
-    }
-
-    [Fact]
     public void GetEdgeWeight_GetsExistingEdgeWeight()
     {
-        var graph1 = new ListGraphRepresentation<int>(2);
-        var graph2 = new ListGraphRepresentation<float>(2);
+        var graph1 = new DictionaryRepresentation<int>(2);
+        var graph2 = new DictionaryRepresentation<float>(2);
 
         Assert.True(graph1.AddEdge(0, 1));
         Assert.True(graph2.AddEdge(0, 1));
@@ -77,8 +59,8 @@ public class ListGraphRepresentationTests
     [Fact]
     public void GetEdgeWeight_ThrowExceptionFromNonExistingEdgeWeight()
     {
-        var graph1 = new ListGraphRepresentation<int>(2);
-        var graph2 = new ListGraphRepresentation<float>(2);
+        var graph1 = new DictionaryRepresentation<int>(2);
+        var graph2 = new DictionaryRepresentation<float>(2);
 
         Assert.Throws<NonExistingEdgeException>(() => graph1.GetEdgeWeight(0, 1));
         Assert.Throws<NonExistingEdgeException>(() => graph2.GetEdgeWeight(0, 1));
@@ -87,7 +69,7 @@ public class ListGraphRepresentationTests
     [Fact]
     public void GetNeighbours_ReturnsCorrectCollection()
     {
-        var graph = new ListGraphRepresentation<int>(3);
+        var graph = new DictionaryRepresentation<int>(3);
 
         Assert.True(graph.AddEdge(0, 1));
         Assert.True(graph.AddEdge(0, 2));
@@ -101,7 +83,7 @@ public class ListGraphRepresentationTests
     [Fact]
     public void GetOutEdges_ReturnsCorrectCollection()
     {
-        var graph = new ListGraphRepresentation<int>(3);
+        var graph = new DictionaryRepresentation<int>(3);
 
         Assert.True(graph.AddEdge(0, 1));
         graph.SetEdgeWeight(0, 1, 3);
@@ -117,7 +99,7 @@ public class ListGraphRepresentationTests
     [Fact]
     public void GetInDegree_ReturnsCorrectValue()
     {
-        var graph = new ListGraphRepresentation<int>(3);
+        var graph = new DictionaryRepresentation<int>(3);
 
         Assert.True(graph.AddEdge(0, 1));
         Assert.True(graph.AddEdge(2, 1));
@@ -128,7 +110,7 @@ public class ListGraphRepresentationTests
     [Fact]
     public void GetOutDegree_ReturnsCorrectValue()
     {
-        var graph = new ListGraphRepresentation<int>(3);
+        var graph = new DictionaryRepresentation<int>(3);
 
         Assert.True(graph.AddEdge(0, 1));
         Assert.True(graph.AddEdge(0, 2));
@@ -139,7 +121,7 @@ public class ListGraphRepresentationTests
     [Fact]
     public void SetEdgeWeight_ExistingEdgesWeightIsChanged()
     {
-        var graph = new ListGraphRepresentation<int>(2);
+        var graph = new DictionaryRepresentation<int>(2);
 
         Assert.True(graph.AddEdge(0, 1));
 
@@ -151,7 +133,7 @@ public class ListGraphRepresentationTests
     [Fact]
     public void SetEdgeWeight_ThrowExceptionAfterChangingNonExistingEdge()
     {
-        var graph = new ListGraphRepresentation<int>(2);
+        var graph = new DictionaryRepresentation<int>(2);
 
         Assert.True(graph.AddEdge(0, 1));
 
@@ -162,7 +144,7 @@ public class ListGraphRepresentationTests
     [Fact]
     public void HasEdge_CheckingEdgesCorrectly()
     {
-        var graph = new ListGraphRepresentation<int>(2);
+        var graph = new DictionaryRepresentation<int>(2);
 
         Assert.True(graph.AddEdge(0, 1));
 
@@ -173,13 +155,13 @@ public class ListGraphRepresentationTests
     [Fact]
     public void HasEdge_ThrowExceptionAfterInvalidEdge()
     {
-        var graph = new ListGraphRepresentation<int>(2);
+        var graph = new DictionaryRepresentation<int>(2);
 
         Assert.Throws<InvalidEdgeException>(() => graph.SetEdgeWeight(0, 2, 3));
     }
 
     [Fact]
-    public void ReadingStream_ForDirectedWeightedGraph_ValidStructure()
+    public void ReadingStream_ValidStructure()
     {
         string s = """
         0 1 3
@@ -193,39 +175,12 @@ public class ListGraphRepresentationTests
         sw.Flush();
         ms.Position = 0;
 
-        var graph = new ListGraphRepresentation<int>(ms, true);
+        var graph = new DictionaryRepresentation<int>(ms);
 
         Assert.True(graph.VertexCount == 3);
         Assert.True(graph.EdgeCount == 3);
         Assert.True(graph.GetEdgeWeight(0, 1) == 3);
         Assert.True(graph.GetEdgeWeight(1, 2) == 2);
         Assert.True(graph.GetEdgeWeight(2, 0) == 1);
-    }
-
-    [Fact]
-    public void ReadingStream_ForUndirectedWeightedGraph_ValidStructure()
-    {
-        string s = """
-        0 1 3
-        1 2 2
-        2 0 1
-        """;
-
-        MemoryStream ms = new();
-        StreamWriter sw = new(ms);
-        sw.Write(s);
-        sw.Flush();
-        ms.Position = 0;
-
-        var graph = new ListGraphRepresentation<int>(ms, false);
-
-        Assert.True(graph.VertexCount == 3);
-        Assert.True(graph.EdgeCount == 6);
-        Assert.True(graph.GetEdgeWeight(0, 1) == 3);
-        Assert.True(graph.GetEdgeWeight(1, 0) == 3);
-        Assert.True(graph.GetEdgeWeight(1, 2) == 2);
-        Assert.True(graph.GetEdgeWeight(2, 1) == 2);
-        Assert.True(graph.GetEdgeWeight(2, 0) == 1);
-        Assert.True(graph.GetEdgeWeight(0, 2) == 1);
     }
 }

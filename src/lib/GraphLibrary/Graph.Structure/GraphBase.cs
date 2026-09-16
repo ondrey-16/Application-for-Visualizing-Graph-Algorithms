@@ -6,30 +6,23 @@ namespace AVGA.GraphLibrary;
 /// <typeparam name="T">Type of edges weights.</typeparam>
 abstract public class GraphBase : IGraphMethods
 {
-    protected GraphRepresentation _representation;
-    protected RepresentationTypeEnum _representationType;
-    protected readonly bool _isDirected;
-    public GraphBase(int V, RepresentationTypeEnum representationType, bool isDirected)
+    protected DictionaryRepresentation _representation;
+
+    /// <summary>
+    /// Constructs a graph reserved for V vertices.
+    /// </summary>
+    /// <param name="V">Count of vertices.</param>
+    public GraphBase(int V)
     {
-        _isDirected = isDirected;
-        _representationType = representationType;
-        _representation = representationType switch
-        {
-            RepresentationTypeEnum.LIST => new ListGraphRepresentation(V),
-            RepresentationTypeEnum.MATRIX => new MatrixGraphRepresentation(V),
-            _ => throw new InvalidRepresentationTypeException()
-        };
+        _representation = new DictionaryRepresentation(V);
     }
-    public GraphBase(Stream s, RepresentationTypeEnum representationType, bool isDirected)
+    /// <summary>
+    /// Constructs a graph compatible with data read from stream.
+    /// </summary>
+    /// <param name="s">Graph data stream</param>
+    public GraphBase(Stream s)
     {
-        _isDirected = isDirected;
-        _representationType = representationType;
-        _representation = representationType switch
-        {
-            RepresentationTypeEnum.LIST => new ListGraphRepresentation(s, _isDirected),
-            RepresentationTypeEnum.MATRIX => new MatrixGraphRepresentation(s, _isDirected),
-            _ => throw new InvalidRepresentationTypeException()
-        };
+        _representation = new DictionaryRepresentation(s);
     }
 
     abstract public int EdgeCount { get; }
@@ -42,75 +35,6 @@ abstract public class GraphBase : IGraphMethods
     public int GetOutDegree(int v) => _representation.GetOutDegree(v);
     public IEnumerable<int> GetNeighbours(int v)  => _representation.GetNeighbours(v);
     public bool HasEdge(int u, int v) => _representation.HasEdge(u, v);
-
-    /// <summary>
-    /// Changes graph representation to adjacency matrix.
-    /// </summary>
-    public void ChangeToMatrixRepresentation()
-    {
-        if (_representationType == RepresentationTypeEnum.MATRIX)
-        {
-            return;
-        }
-
-        MatrixGraphRepresentation newRepresentation = new(VertexCount);
-        CopyEdgesToNewRepresentation(newRepresentation);
-        
-        _representation = newRepresentation;
-    }
-
-    /// <summary>
-    /// Changes graph representation to adjacency list.
-    /// </summary>
-    public void ChangeToListRepresentation()
-    {
-        if (_representationType == RepresentationTypeEnum.LIST)
-        {
-            return;
-        }
-
-        ListGraphRepresentation newRepresentation = new(VertexCount);
-        CopyEdgesToNewRepresentation(newRepresentation);
-        
-        _representation = newRepresentation;
-    }
-
-    /// <summary>
-    /// Changes graph representation basing on given type.
-    /// </summary>
-    /// <param name="representationType">Type of graph representation to change.</param>
-    /// <exception cref="InvalidRepresentationTypeException">Thrown if given representation type is invalid.</exception>
-    public void ChangeRepresentation(RepresentationTypeEnum representationType)
-    {
-        switch (representationType) 
-        {
-            case RepresentationTypeEnum.LIST: 
-                ChangeToListRepresentation();
-                break;
-            case RepresentationTypeEnum.MATRIX:
-                ChangeToMatrixRepresentation();
-                break;
-            default:
-                throw new InvalidRepresentationTypeException();
-        };
-    }
-
-    /// <summary>
-    /// Copies the edges with their weight to a new instance of graph representation.
-    /// </summary>
-    /// <param name="newRepresentation">An object of new graph representation.</param>
-    private void CopyEdgesToNewRepresentation(GraphRepresentation newRepresentation)
-    {
-        for (int i = 0; i < VertexCount; i++)
-        {
-            var neighbours = _representation.GetNeighbours(i);
-
-            foreach (var n in neighbours)
-            {
-                newRepresentation.AddEdge(i, n);
-            }
-        }
-    }
 }
 
 
@@ -120,30 +44,24 @@ abstract public class GraphBase : IGraphMethods
 /// <typeparam name="T">Type of edges weights.</typeparam>
 abstract public class GraphBase<T> : IWeightedGraphMethods<T> where T : INumber<T>
 {
-    protected GraphRepresentation<T> _representation;
-    protected RepresentationTypeEnum _representationType;
+    protected DictionaryRepresentation<T> _representation;
     protected bool _isDirected;
-    public GraphBase(int V, RepresentationTypeEnum representationType, bool isDirected)
+
+    /// <summary>
+    /// Constructs a weighted graph reserved for V vertices.
+    /// </summary>
+    /// <param name="V">Count of vertices.</param>
+    public GraphBase(int V)
     {
-        _isDirected = isDirected;
-        _representationType = representationType;
-        _representation = representationType switch
-        {
-            RepresentationTypeEnum.LIST => new ListGraphRepresentation<T>(V),
-            RepresentationTypeEnum.MATRIX => new MatrixGraphRepresentation<T>(V),
-            _ => throw new InvalidRepresentationTypeException()
-        };
+        _representation = new DictionaryRepresentation<T>(V);
     }
-    public GraphBase(Stream s, RepresentationTypeEnum representationType, bool isDirected)
+    /// <summary>
+    /// Constructs a weighted graph compatible with data read from stream.
+    /// </summary>
+    /// <param name="s">Graph data stream</param>
+    public GraphBase(Stream s)
     {
-        _isDirected = isDirected;
-        _representationType = representationType;
-        _representation = representationType switch
-        {
-            RepresentationTypeEnum.LIST => new ListGraphRepresentation<T>(s, _isDirected),
-            RepresentationTypeEnum.MATRIX => new MatrixGraphRepresentation<T>(s, _isDirected),
-            _ => throw new InvalidRepresentationTypeException()
-        };
+        _representation = new DictionaryRepresentation<T>(s);
     }
 
     abstract public int EdgeCount { get; }
@@ -159,74 +77,4 @@ abstract public class GraphBase<T> : IWeightedGraphMethods<T> where T : INumber<
     public IEnumerable<(int, T)> GetOutEdges(int v) => _representation.GetOutEdges(v);
     public T GetEdgeWeight(int u, int v) => _representation.GetEdgeWeight(u, v);
     public void SetEdgeWeight(int u, int v, T w) => _representation.SetEdgeWeight(u, v, w);
-
-    /// <summary>
-    /// Changes graph representation to adjacency matrix.
-    /// </summary>
-    public void ChangeToMatrixRepresentation()
-    {
-        if (_representationType == RepresentationTypeEnum.MATRIX)
-        {
-            return;
-        }
-
-        MatrixGraphRepresentation<T> newRepresentation = new(VertexCount);
-        CopyEdgesToNewRepresentation(newRepresentation);
-        
-        _representation = newRepresentation;
-    }
-
-    /// <summary>
-    /// Changes graph representation to adjacency list.
-    /// </summary>
-    public void ChangeToListRepresentation()
-    {
-        if (_representationType == RepresentationTypeEnum.LIST)
-        {
-            return;
-        }
-
-        ListGraphRepresentation<T> newRepresentation = new(VertexCount);
-        CopyEdgesToNewRepresentation(newRepresentation);
-        
-        _representation = newRepresentation;
-    }
-
-    /// <summary>
-    /// Changes graph representation basing on given type.
-    /// </summary>
-    /// <param name="representationType">Type of graph representation to change.</param>
-    /// <exception cref="InvalidRepresentationTypeException">Thrown if given representation type is invalid.</exception>
-    public void ChangeRepresentation(RepresentationTypeEnum representationType)
-    {
-        switch (representationType) 
-        {
-            case RepresentationTypeEnum.LIST: 
-                ChangeToListRepresentation();
-                break;
-            case RepresentationTypeEnum.MATRIX:
-                ChangeToMatrixRepresentation();
-                break;
-            default:
-                throw new InvalidRepresentationTypeException();
-        };
-    }
-
-    /// <summary>
-    /// Copies the edges with their weight to a new instance of graph representation.
-    /// </summary>
-    /// <param name="newRepresentation">An object of new graph representation.</param>
-    private void CopyEdgesToNewRepresentation(GraphRepresentation<T> newRepresentation)
-    {
-        for (int i = 0; i < VertexCount; i++)
-        {
-            var edges = _representation.GetOutEdges(i);
-
-            foreach (var edge in edges)
-            {
-                newRepresentation.AddEdge(i, edge.Item1);
-                newRepresentation.SetEdgeWeight(i, edge.Item1, edge.Item2);
-            }
-        }
-    }
 }

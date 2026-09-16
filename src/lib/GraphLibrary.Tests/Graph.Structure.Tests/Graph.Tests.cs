@@ -17,7 +17,7 @@ public class UndirectedGraphTests
         sw.Flush();
         ms.Position = 0;
 
-        var graph = new Graph(ms, RepresentationTypeEnum.LIST);
+        var graph = new Graph(ms);
 
         Assert.True(graph.VertexCount == 3);
         Assert.True(graph.EdgeCount == 3);
@@ -30,18 +30,6 @@ public class UndirectedGraphTests
         Assert.True(cloned.HasEdge(2, 1));
         Assert.True(cloned.HasEdge(2, 0));
         Assert.True(cloned.HasEdge(0, 2));
-
-        cloned.ChangeToMatrixRepresentation();
-
-        Assert.True(cloned.HasEdge(0, 1));
-        Assert.True(cloned.HasEdge(1, 2));
-        Assert.True(cloned.HasEdge(2, 0));
-
-        cloned.ChangeToListRepresentation();
-
-        Assert.True(cloned.HasEdge(0, 1));
-        Assert.True(cloned.HasEdge(1, 2));
-        Assert.True(cloned.HasEdge(2, 0));
     }
 
     [Fact]
@@ -59,7 +47,7 @@ public class UndirectedGraphTests
         sw.Flush();
         ms.Position = 0;
 
-        var graph = new Graph<int>(ms, RepresentationTypeEnum.LIST);
+        var graph = new Graph<int>(ms);
 
         Assert.True(graph.VertexCount == 3);
         Assert.True(graph.EdgeCount == 3);
@@ -71,18 +59,6 @@ public class UndirectedGraphTests
         Assert.True(graph.GetEdgeWeight(0, 2) == 1);
 
         var cloned = (Graph<int>) graph.Clone();
-
-        Assert.True(cloned.GetEdgeWeight(0, 1) == 3);
-        Assert.True(cloned.GetEdgeWeight(1, 2) == 2);
-        Assert.True(cloned.GetEdgeWeight(2, 0) == 1);
-
-        cloned.ChangeToMatrixRepresentation();
-
-        Assert.True(cloned.GetEdgeWeight(0, 1) == 3);
-        Assert.True(cloned.GetEdgeWeight(1, 2) == 2);
-        Assert.True(cloned.GetEdgeWeight(2, 0) == 1);
-
-        cloned.ChangeToListRepresentation();
 
         Assert.True(cloned.GetEdgeWeight(0, 1) == 3);
         Assert.True(cloned.GetEdgeWeight(1, 2) == 2);
