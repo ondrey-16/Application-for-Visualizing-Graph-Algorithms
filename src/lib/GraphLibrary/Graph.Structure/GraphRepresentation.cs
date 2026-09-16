@@ -1,19 +1,11 @@
 namespace AVGA.GraphLibrary;
 
-/// <summary>
-/// Abstract class for graphs representation.
-/// </summary>
-/// <typeparam name="T">Type of edges weights.</typeparam>
-public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphMethods<T> where T : INumber<T>
+public abstract class GraphRepresentation : IGraphMethods, ICloneable
 {
     protected int _V;
     protected int _E;
     protected readonly List<int> _inDegrees;
     protected readonly List<int> _outDegrees;
-
-    public int VertexCount => _V;
-    public int EdgeCount => _E;
-
     public GraphRepresentation()
     {
         _inDegrees = new();
@@ -26,15 +18,8 @@ public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphM
         _outDegrees = Enumerable.Repeat(0, V).ToList();
         _E = 0;
     }
-
-    abstract public bool AddEdge(int u, int v);
-    abstract public bool RemoveEdge(int u, int v);
-    abstract public T GetEdgeWeight(int u, int v);
-    abstract public IEnumerable<int> GetNeighbours(int v);
-    abstract public IEnumerable<(int, T)> GetOutEdges(int v);
-    abstract public void SetEdgeWeight(int u, int v, T w);
-    abstract public bool HasEdge(int u, int v);
-    abstract public object Clone();
+    public int VertexCount => _V;
+    public int EdgeCount => _E;
 
     public int GetInDegree(int v)
     {
@@ -42,12 +27,19 @@ public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphM
 
         return _inDegrees[v];
     }
+
     public int GetOutDegree(int v)
     {
         CheckVertex(v);
 
         return _outDegrees[v];
     }
+
+    abstract public bool AddEdge(int u, int v);
+    abstract public IEnumerable<int> GetNeighbours(int v);
+    abstract public bool HasEdge(int u, int v);
+    abstract public bool RemoveEdge(int u, int v);
+    abstract public object Clone();
 
     /// <summary>
     /// Checks if vertex is valid.
@@ -75,4 +67,19 @@ public abstract class GraphRepresentation<T> : IGraphMethods<T>, IWeightedGraphM
             throw new InvalidEdgeException(u, v, _V);
         }
     }
+}
+
+/// <summary>
+/// Abstract class for weighted graph representations.
+/// </summary>
+/// <typeparam name="T">Type of edges weights.</typeparam>
+public abstract class GraphRepresentation<T> : GraphRepresentation, IWeightedGraphMethods<T> where T : INumber<T>
+{
+    public GraphRepresentation() : base()
+    {}
+    public GraphRepresentation(int V) : base(V)
+    {}
+    abstract public T GetEdgeWeight(int u, int v);
+    abstract public IEnumerable<(int, T)> GetOutEdges(int v);
+    abstract public void SetEdgeWeight(int u, int v, T w);
 }

@@ -3,8 +3,7 @@ namespace AVGA.GraphLibrary;
 /// <summary>
 /// Interface of methods necessary to operate on graphs and their representations.
 /// </summary>
-/// <typeparam name="T">Type of edges' weights.</typeparam>
-public interface IGraphMethods<T> : ICloneable where T : INumber<T>
+public interface IGraphMethods
 {
     /// <summary>
     /// Count of vertices building the graph.
@@ -52,13 +51,6 @@ public interface IGraphMethods<T> : ICloneable where T : INumber<T>
     /// <param name="v">Vertex</param>
     /// <returns>Collection of neighbours of the vertex.</returns>
     public IEnumerable<int> GetNeighbours(int v);
-
-    /// <summary>
-    /// Returns outgoing edges of vertex.
-    /// </summary>
-    /// <param name="v">Vertex</param>
-    /// <returns>Collection of neighbours of the vertex.</returns>
-    public IEnumerable<(int, T)> GetOutEdges(int v);
 
     /// <summary>
     /// Returns information if edge exists.

@@ -4,8 +4,15 @@ namespace AVGA.GraphLibrary;
 /// Interface of methods used for edges weights operations in weighted graphs. 
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-public interface IWeightedGraphMethods<T> where T : INumber<T>
+public interface IWeightedGraphMethods<T> : IGraphMethods where T : INumber<T>
 {
+    /// <summary>
+    /// Returns outgoing edges of vertex.
+    /// </summary>
+    /// <param name="v">Vertex</param>
+    /// <returns>Collection of neighbours of the vertex.</returns>
+    public IEnumerable<(int, T)> GetOutEdges(int v);
+    
     /// <summary>
     /// Returns a weight of the edge if exists.
     /// </summary>

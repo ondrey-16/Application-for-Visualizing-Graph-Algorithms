@@ -1,7 +1,161 @@
 namespace AVGA.GraphLibrary;
 
 /// <summary>
-/// Representation of graphs operating on adjacency list.
+/// Representation of unweighted graphs operating on adjacency list.
+/// </summary>
+public class ListGraphRepresentation : GraphRepresentation
+{
+    private readonly List<List<int>> _adjacencyList;
+
+
+    public ListGraphRepresentation(int V) : base(V)
+    {
+        _adjacencyList = Enumerable.Range(0, V).Select(_ => new List<int>()).ToList();
+    }
+
+    public ListGraphRepresentation(Stream s, bool isDirected) : base()
+    {
+        _adjacencyList = new List<List<int>>();
+
+        string? line;
+        int u, v;
+        int maxV = 0;
+
+        using StreamReader sr = new(s);
+
+        while ((line = sr.ReadLine()) is not null)
+        {
+            var separated = line.Split( ).ToList();
+            if (separated.Count != 2)
+            {
+                throw new ArgumentException();
+            }
+
+            if (!int.TryParse(separated[0], out u))
+            {
+                throw new ArgumentException();
+            }
+            if (!int.TryParse(separated[1], out v))
+            {
+                throw new ArgumentException();
+            }
+
+            int maxL = Math.Max(u, v);
+
+            if (maxL >= maxV)
+            {
+                for (int i = maxV; i <= maxL; i++)
+                {
+                    _adjacencyList.Add(new List<int>());
+                    _inDegrees.Add(0);
+                    _outDegrees.Add(0);
+                }
+
+                maxV = maxL + 1;
+            }
+
+            if (HasEdge(u, v))
+            {
+                throw new ArgumentException();
+            }
+
+            _adjacencyList[u].Add(v);
+            _inDegrees[v]++;
+            _outDegrees[u]++;
+            _E++;
+
+            if (!isDirected)
+            {
+                _adjacencyList[v].Add(u);
+                _inDegrees[u]++;
+                _outDegrees[v]++;
+                _E++;
+            }
+        }
+
+        _V = maxV;
+    }
+
+    public override bool AddEdge(int u, int v)
+    {
+        CheckEdge(u, v);
+
+        if (!_adjacencyList[u].Any(e => e == v))
+        {
+            _adjacencyList[u].Add(v);
+            _E++;
+            _inDegrees[v]++;
+            _outDegrees[u]++;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public override bool RemoveEdge(int u, int v)
+    {
+        CheckEdge(u, v);
+
+        if (_adjacencyList[u].Any(e => e == v))
+        {
+            _adjacencyList[u].RemoveAll(e => e == v);
+            _E--;
+            _inDegrees[v]--;
+            _outDegrees[u]--;
+            
+            return true;
+        }
+
+        return false;
+    }
+
+    public override IEnumerable<int> GetNeighbours(int v)
+    {
+        CheckVertex(v);
+
+        return _adjacencyList[v].Select(e => e);
+    }
+
+    public override bool HasEdge(int u, int v)
+    {
+        try
+        {
+            CheckEdge(u, v);
+        }
+        catch (InvalidEdgeException)
+        {
+            return false;
+        }
+        
+        return _adjacencyList[u].Any(e => e == v);
+    }
+
+    public override object Clone()
+    {
+        ListGraphRepresentation cloned = new(_V);
+
+        for (int i = 0; i < this._V; i++)
+        {
+            cloned._inDegrees[i] = this._inDegrees[i];
+            cloned._outDegrees[i] = this._outDegrees[i];
+            cloned._adjacencyList[i] = new List<int>();
+
+            for (int j = 0; j < this._adjacencyList[i].Count; j++)
+            {
+                cloned._adjacencyList[i].Add(this._adjacencyList[i][j]);
+            }
+        }
+
+        cloned._E = this._E;
+
+        return cloned;
+    }
+}
+
+
+/// <summary>
+/// Representation of weighted graphs operating on adjacency list.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
 public class ListGraphRepresentation<T> : GraphRepresentation<T> where T : INumber<T>

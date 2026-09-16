@@ -1,57 +1,63 @@
 namespace AVGA.GraphLibrary;
 
 /// <summary>
-/// Abstract class for graphs objects.
+/// Class representing a basic graph.
+/// </summary>
+public class Graph : GraphBase
+{
+    public Graph(int V, RepresentationTypeEnum representationType)
+        : base(V, representationType, false)
+    {}
+    
+    public Graph(Stream s, RepresentationTypeEnum representationType)
+        : base(s, representationType, false)
+    {}
+
+    public override int EdgeCount => _representation.EdgeCount / 2;
+
+    public override bool AddEdge(int u, int v) 
+        => _representation.AddEdge(u, v) && _representation.AddEdge(v, u);
+
+    public override bool RemoveEdge(int u, int v)
+        => _representation.RemoveEdge(u, v) && _representation.RemoveEdge(v, u);
+
+    public override object Clone()
+    {
+        Graph cloned = new(this.VertexCount, this._representationType);
+        cloned._representation = (GraphRepresentation) this._representation.Clone();
+
+        return cloned;
+    }
+}
+
+
+/// <summary>
+/// Class representing a weighted basic graph.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-abstract public class Graph<T> : IGraphMethods<T> where T : INumber<T>
+public class Graph<T> : GraphBase<T> where T : INumber<T>
 {
-    protected RepresentationTypeEnum _representationType;
-    protected readonly bool _isDirected;
+    public Graph(int V, RepresentationTypeEnum representationType)
+        : base(V, representationType, false)
+    {}
+    
+    public Graph(Stream s, RepresentationTypeEnum representationType)
+        : base(s, representationType, false)
+    {}
 
-    public Graph(bool isDirected)
+    public override int EdgeCount => _representation.EdgeCount / 2;
+
+    public override bool AddEdge(int u, int v) 
+        => _representation.AddEdge(u, v) && _representation.AddEdge(v, u);
+
+    public override bool RemoveEdge(int u, int v)
+        => _representation.RemoveEdge(u, v) && _representation.RemoveEdge(v, u);
+
+    public override object Clone()
     {
-        _isDirected = isDirected;
-    }
+        Graph<T> cloned = new(this.VertexCount, this._representationType);
+        cloned._representation = (GraphRepresentation<T>) this._representation.Clone();
 
-    abstract public int VertexCount { get; }
-    abstract public int EdgeCount { get; }
-    abstract public bool AddEdge(int u, int v);
-    abstract public bool RemoveEdge(int u, int v);
-    abstract public int GetInDegree(int v);
-    abstract public int GetOutDegree(int v);
-    abstract public IEnumerable<int> GetNeighbours(int v);
-    abstract public IEnumerable<(int, T)> GetOutEdges(int v);
-    abstract public bool HasEdge(int u, int v);
-    abstract public object Clone();
-
-    /// <summary>
-    /// Changes graph representation to adjacency matrix.
-    /// </summary>
-    abstract public void ChangeToMatrixRepresentation();
-
-    /// <summary>
-    /// Changes graph representation to adjacency list.
-    /// </summary>
-    abstract public void ChangeToListRepresentation();
-
-    /// <summary>
-    /// Changes graph representation basing on given type.
-    /// </summary>
-    /// <param name="representationType">Type of graph representation to change.</param>
-    /// <exception cref="InvalidRepresentationTypeException">Thrown if given representation type is invalid.</exception>
-    public void ChangeRepresentation(RepresentationTypeEnum representationType)
-    {
-        switch (representationType) 
-        {
-            case RepresentationTypeEnum.LIST: 
-                ChangeToListRepresentation();
-                break;
-            case RepresentationTypeEnum.MATRIX:
-                ChangeToMatrixRepresentation();
-                break;
-            default:
-                throw new InvalidRepresentationTypeException();
-        };
+        return cloned;
     }
 }
