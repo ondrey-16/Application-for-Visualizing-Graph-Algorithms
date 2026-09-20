@@ -90,10 +90,10 @@ public class DictionaryRepresentationTests
         Assert.True(graph.AddEdge(0, 2));
         graph.SetEdgeWeight(0, 2, 4);
 
-        var edges = graph.GetOutEdges(0).ToHashSet();
+        var edges = graph.GetOutEdges(0);
 
-        Assert.Contains((1, 3), edges);
-        Assert.Contains((2, 4), edges);
+        Assert.Contains(new Edge<int>(0, 1, 3), edges);
+        Assert.Contains(new Edge<int>(0, 2, 4), edges);
     }
 
     [Fact]

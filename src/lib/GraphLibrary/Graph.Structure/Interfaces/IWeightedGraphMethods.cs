@@ -7,13 +7,6 @@ namespace AVGA.GraphLibrary;
 public interface IWeightedGraphMethods<T> : IGraphMethods where T : INumber<T>
 {
     /// <summary>
-    /// Returns outgoing edges of vertex.
-    /// </summary>
-    /// <param name="v">Vertex</param>
-    /// <returns>Collection of neighbours of the vertex.</returns>
-    public IEnumerable<(int, T)> GetOutEdges(int v);
-    
-    /// <summary>
     /// Returns a weight of the edge if exists.
     /// </summary>
     /// <param name="u">Start of the edge.</param>
