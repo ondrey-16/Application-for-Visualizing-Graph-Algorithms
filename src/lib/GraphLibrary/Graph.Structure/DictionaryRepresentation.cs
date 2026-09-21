@@ -5,11 +5,23 @@ namespace AVGA.GraphLibrary;
 /// </summary>
 public class DictionaryRepresentation : IGraphMethods, ICloneable
 {
+    /// <summary>
+    /// An adjacency structure.
+    /// </summary>
     private Dictionary<int, List<int>> _adjacencyDictionary;
+    /// <summary>
+    /// An array of counts of vertices incoming degrees.
+    /// </summary>
     private readonly List<int> _inDegrees;
+    /// <summary>
+    /// An array of counts of vertices outgoing degrees.
+    /// </summary>
     private readonly List<int> _outDegrees;
     public int VertexCount { get; }
     public int EdgeCount { get; private set; }
+    /// <summary>
+    /// A representation of graph as an adjacency structure.
+    /// </summary>
     public Dictionary<int, List<int>> Representation { get => _adjacencyDictionary; }
 
     /// <summary>
@@ -151,6 +163,17 @@ public class DictionaryRepresentation : IGraphMethods, ICloneable
 
         return cloned;
     }
+
+    /// <summary>
+    /// Returns outgoing edges of vertex.
+    /// </summary>
+    /// <param name="v">Vertex</param>
+    /// <returns>Collection of neighbours of the vertex.</returns>
+    public IEnumerable<Edge> GetOutEdges(int v)
+    {
+        VertexValidator.IsValid(v, VertexCount);
+        return _adjacencyDictionary[v].Select(e => new Edge(v, e));
+    }
 }
 
 
@@ -160,11 +183,23 @@ public class DictionaryRepresentation : IGraphMethods, ICloneable
 /// <typeparam name="T">Type of edges weights.</typeparam>
 public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable where T : INumber<T>
 {
+    /// <summary>
+    /// An adjacency structure.
+    /// </summary>
     private Dictionary<int, List<(int vertex, T weight)>> _adjacencyDictionary;
+    /// <summary>
+    /// An array of counts of vertices incoming degrees.
+    /// </summary>
     private readonly List<int> _inDegrees;
+    /// <summary>
+    /// An array of counts of vertices outgoing degrees.
+    /// </summary>
     private readonly List<int> _outDegrees;
     public int VertexCount { get; }
     public int EdgeCount { get; private set; }
+    /// <summary>
+    /// A representation of graph as an adjacency structure.
+    /// </summary>
     public Dictionary<int, List<(int, T)>> Representation { get => _adjacencyDictionary; }
 
     /// <summary>
@@ -343,11 +378,6 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable 
 
         return false;
     }
-    public IEnumerable<(int, T)> GetOutEdges(int v)
-    {
-        VertexValidator.IsValid(v, VertexCount);
-        return _adjacencyDictionary[v];
-    }
     public object Clone()
     {
         DictionaryRepresentation<T> cloned = new(VertexCount);
@@ -356,5 +386,16 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable 
         cloned.EdgeCount = this.EdgeCount;
 
         return cloned;
+    }
+
+    /// <summary>
+    /// Returns outgoing edges of vertex.
+    /// </summary>
+    /// <param name="v">Vertex</param>
+    /// <returns>Collection of neighbours of the vertex.</returns>
+    public IEnumerable<Edge<T>> GetOutEdges(int v)
+    {
+        VertexValidator.IsValid(v, VertexCount);
+        return _adjacencyDictionary[v].Select(e => new Edge<T>(v, e.vertex, e.weight));
     }
 }

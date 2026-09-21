@@ -6,6 +6,9 @@ namespace AVGA.GraphLibrary;
 /// <typeparam name="T">Type of edges weights.</typeparam>
 abstract public class GraphBase : IGraphMethods
 {
+    /// <summary>
+    /// A graph representation based on a adjacency dictionary.
+    /// </summary>
     protected DictionaryRepresentation _representation;
 
     /// <summary>
@@ -34,6 +37,7 @@ abstract public class GraphBase : IGraphMethods
     public int GetInDegree(int v) => _representation.GetInDegree(v);
     public int GetOutDegree(int v) => _representation.GetOutDegree(v);
     public IEnumerable<int> GetNeighbours(int v)  => _representation.GetNeighbours(v);
+    public IEnumerable<Edge> GetOutEdges(int v) => _representation.GetOutEdges(v);
     public bool HasEdge(int u, int v) => _representation.HasEdge(u, v);
 }
 
@@ -44,8 +48,10 @@ abstract public class GraphBase : IGraphMethods
 /// <typeparam name="T">Type of edges weights.</typeparam>
 abstract public class GraphBase<T> : IWeightedGraphMethods<T> where T : INumber<T>
 {
+    /// <summary>
+    /// A graph representation based on a adjacency dictionary.
+    /// </summary>
     protected DictionaryRepresentation<T> _representation;
-    protected bool _isDirected;
 
     /// <summary>
     /// Constructs a weighted graph reserved for V vertices.
@@ -74,7 +80,7 @@ abstract public class GraphBase<T> : IWeightedGraphMethods<T> where T : INumber<
     public int GetOutDegree(int v) => _representation.GetOutDegree(v);
     public IEnumerable<int> GetNeighbours(int v)  => _representation.GetNeighbours(v);
     public bool HasEdge(int u, int v) => _representation.HasEdge(u, v);
-    public IEnumerable<(int, T)> GetOutEdges(int v) => _representation.GetOutEdges(v);
+    public IEnumerable<Edge<T>> GetOutEdges(int v) => _representation.GetOutEdges(v);
     public T GetEdgeWeight(int u, int v) => _representation.GetEdgeWeight(u, v);
     public void SetEdgeWeight(int u, int v, T w) => _representation.SetEdgeWeight(u, v, w);
 }
