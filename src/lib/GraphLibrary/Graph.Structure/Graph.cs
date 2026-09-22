@@ -6,9 +6,9 @@ namespace AVGA.GraphLibrary;
 public class Graph : GraphBase
 {
     /// <summary>
-    /// Constructs a basic graph compatible with data read from stream.
+    /// Constructs an empty basic graph reserved for V vertices..
     /// </summary>
-    /// <param name="s">Graph data stream</param>
+    /// <param name="V">Count of vertices</param>
     public Graph(int V)
         : base(V)
     {}
@@ -59,12 +59,12 @@ public class Graph : GraphBase
 /// Class representing a weighted basic graph.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-public class Graph<T> : GraphBase<T> where T : INumber<T>
+public class Graph<T> : GraphBase<T> where T : INumber<T>, IMinMaxValue<T>
 {
     /// <summary>
-    /// Constructs a basic weighted graph compatible with data read from stream.
+    /// Constructs an empty basic weighted graph reserved for V vertices..
     /// </summary>
-    /// <param name="s">Graph data stream</param>
+    /// <param name="V">Count of vertices</param>
     public Graph(int V)
         : base(V)
     {}

@@ -12,7 +12,7 @@ abstract public class GraphBase : IGraphMethods
     protected DictionaryRepresentation _representation;
 
     /// <summary>
-    /// Constructs a graph reserved for V vertices.
+    /// Constructs an empty graph reserved for V vertices.
     /// </summary>
     /// <param name="V">Count of vertices.</param>
     public GraphBase(int V)
@@ -46,7 +46,7 @@ abstract public class GraphBase : IGraphMethods
 /// Abstract class for weighted graphs objects.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-abstract public class GraphBase<T> : IWeightedGraphMethods<T> where T : INumber<T>
+abstract public class GraphBase<T> : IWeightedGraphMethods<T> where T : INumber<T>, IMinMaxValue<T>
 {
     /// <summary>
     /// A graph representation based on a adjacency dictionary.

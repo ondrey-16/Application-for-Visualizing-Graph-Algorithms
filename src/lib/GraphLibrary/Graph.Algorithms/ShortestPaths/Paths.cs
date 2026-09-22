@@ -1,6 +1,6 @@
 namespace AVGA.GraphLibrary;
 
-public class Paths<T> where T : INumber<T>
+public class Paths<T> where T : INumber<T>, IMinMaxValue<T>
 {
     private int[][] _prev;
     private T[][] _dist;
@@ -13,19 +13,36 @@ public class Paths<T> where T : INumber<T>
         _dist = new T[V][];
     }
 
+    public void InitSourceRow(int source)
+    {
+        if (_prev[source] is null)
+        {
+            _prev[source] = new int[_V];
+            _dist[source] = new T[_V];
+
+            for (int i = 0; i < _V; i++)
+            {
+                _prev[source][i] = -1;
+                _dist[source][i] = T.MaxValue;
+            }
+        }
+    }
+
+    public void InitAllRows()
+    {
+        for (int i = 0; i < _V; i++)
+        {
+            InitSourceRow(i);
+        }
+    }
+
     public void AddPathNode(int from, int to, int previous, T distance)
     {
         PathValidator.AreCoordinatesValid(from, to, _V);
 
         if (_prev[from] is null)
         {
-            _prev[from] = new int[_V];
-            _dist[from] = new T[_V];
-
-            for (int i = 0; i < _V; i++)
-            {
-                _prev[from][i] = -1;
-            }
+            InitSourceRow(from);
         }
 
         _prev[from][to] = previous;
@@ -80,16 +97,23 @@ public class Paths<T> where T : INumber<T>
 
         int prev = _prev[from][to];
         int i = 1;
-        do
+        while (prev != from)
         {
             path.AddFirst(prev);
+
+            if (_prev[from][prev] == -1)
+            {
+                throw new NonExistingPathException(from, to);
+            }
+
             prev = _prev[from][prev];
             if (++i > _V)
             {
                 throw new InfiniteCycleException();
             }
-        } 
-        while (prev != from);
+        }
+
+        path.AddFirst(from);
 
         return path.ToList();
     }
@@ -106,6 +130,6 @@ public class Paths<T> where T : INumber<T>
             return true;
         }
 
-        return _prev[from][to] != 1;
+        return _prev[from][to] != -1;
     }
 }

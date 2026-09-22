@@ -181,7 +181,7 @@ public class DictionaryRepresentation : IGraphMethods, ICloneable
 /// Representation of weighted graphs operating on adjacency dictionary.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable where T : INumber<T>
+public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable where T : INumber<T>, IMinMaxValue<T>
 {
     /// <summary>
     /// An adjacency structure.

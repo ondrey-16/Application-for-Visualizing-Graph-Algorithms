@@ -13,6 +13,6 @@ public static class BFSGraphExtender
     /// Returns an object of graph searcher with a queue structure to invoke BFS search methods.
     /// </summary>
     /// <param name="graph">A weighted graph to search.</param>
-    public static GraphSearcher<T> BFS<T>(this GraphBase<T> graph) where T : INumber<T>
+    public static GraphSearcher<T> BFS<T>(this GraphBase<T> graph) where T : INumber<T>, IMinMaxValue<T>
         => new GraphSearcher<T>(new Queue<int>(), graph);
 }

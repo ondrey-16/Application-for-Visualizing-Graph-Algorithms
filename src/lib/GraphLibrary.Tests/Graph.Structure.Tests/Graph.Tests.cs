@@ -1,6 +1,6 @@
 namespace AVGA.GraphLibrary.Tests;
 
-public class UndirectedGraphTests
+public class GraphTests
 {
     [Fact]
     public void ReadingStream_ForUnweightedGraph_ValidStructure_AndChangingRepresentation()
