@@ -131,4 +131,41 @@ public class ShortestPathAlgorithmsTests
         Assert.True(path20[2] == 0);
         Assert.True(paths.GetDistance(2, 0) == 4);
     }
+
+    [Fact]
+    public void BFS_ReturnsCorrectPaths()
+    {
+        string s = """
+        0 1
+        0 2
+        1 2
+        2 0
+        2 3
+        3 0
+        """;
+
+        MemoryStream ms = new();
+        StreamWriter sw = new(ms);
+        sw.Write(s);
+        sw.Flush();
+        ms.Position = 0;
+
+        var graph = new DirectedGraph(ms);
+
+        var paths = graph.BFSShortestPaths(0);
+        var path02 = paths.GetPath(0, 2);
+
+        Assert.True(path02.Count == 2);
+        Assert.True(path02[0] == 0);
+        Assert.True(path02[1] == 2);
+        Assert.True(paths.GetDistance(0, 2) == 1);
+
+        var path03 = paths.GetPath(0, 3);
+
+        Assert.True(path03.Count == 3);
+        Assert.True(path03[0] == 0);
+        Assert.True(path03[1] == 2);
+        Assert.True(path03[2] == 3);
+        Assert.True(paths.GetDistance(0, 3) == 2);
+    }
 }
