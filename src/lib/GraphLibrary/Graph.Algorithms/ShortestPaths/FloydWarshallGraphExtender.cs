@@ -1,7 +1,18 @@
 namespace AVGA.GraphLibrary;
 
+/// <summary>
+/// Class extending weighted graphs on Floyd-Warshall algorithm.
+/// </summary>
 public static class FloydWarshallGraphExtender
 {
+    /// <summary>
+    /// Finds shortest paths from every vertex to all reachable vertices using Floyd-Warshall algorithm operating
+    /// on weighted graphs without a negative-weighted cycle in their structure.
+    /// </summary>
+    /// <typeparam name="T">Type of edges weights.</typeparam>
+    /// <param name="graph">Weighted graph</param>
+    /// <returns>Object with found shortest paths information.</returns>
+    /// <exception cref="NegativeCycleException">Thrown when a nagative cycle was detected.</exception>
     public static Paths<T> FloydWarshall<T>(this GraphBase<T> graph) where T : INumber<T>, IMinMaxValue<T>
     {
         Paths<T> paths = new(graph.VertexCount);

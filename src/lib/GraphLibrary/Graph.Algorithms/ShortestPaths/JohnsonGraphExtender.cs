@@ -1,7 +1,17 @@
 namespace AVGA.GraphLibrary;
 
+/// <summary>
+/// Class extending weighted graphs on Johnson algorithm.
+/// </summary>
 public static class JohnsonGraphExtender
 {
+    /// <summary>
+    /// Finds shortest paths from every vertex to all reachable vertices using Johnson algorithm operating
+    /// on weighted graphs without a negative-weighted cycle in their structure.
+    /// </summary>
+    /// <typeparam name="T">Type of edges weights.</typeparam>
+    /// <param name="graph">Weighted graph</param>
+    /// <returns>Object with found shortest paths information.</returns>
     public static Paths<T> Johnson<T>(this GraphBase<T> graph) where T : INumber<T>, IMinMaxValue<T>
     {
         DirectedGraph<T> tmpGraph = new(graph.VertexCount + 1);

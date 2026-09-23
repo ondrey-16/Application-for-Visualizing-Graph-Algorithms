@@ -30,6 +30,26 @@ public class ShortestPathAlgorithmsTests
     }
 
     [Fact]
+    public void BellmanFord_ThrowsExceptionIfNegativeCycle()
+    {
+        string s = """
+        0 1 -1
+        2 0 -2
+        1 2 -2
+        """;
+
+        MemoryStream ms = new();
+        StreamWriter sw = new(ms);
+        sw.Write(s);
+        sw.Flush();
+        ms.Position = 0;
+
+        var graph = new DirectedGraph<int>(ms);
+
+        Assert.Throws<NegativeCycleException>(() => graph.BellmanFord(0));
+    }
+
+    [Fact]
     public void Dijkstra_ReturnsCorrectPath()
     {
         string s = """
@@ -54,6 +74,26 @@ public class ShortestPathAlgorithmsTests
         Assert.True(path[1] == 1);
         Assert.True(path[2] == 2);
         Assert.True(paths.GetDistance(0, 2) == 3);
+    }
+
+    [Fact]
+    public void Dijkstra_ThrowsExceptionIfNegativeEdgeWeight()
+    {
+        string s = """
+        0 1 1
+        0 2 -2
+        1 2 2
+        """;
+
+        MemoryStream ms = new();
+        StreamWriter sw = new(ms);
+        sw.Write(s);
+        sw.Flush();
+        ms.Position = 0;
+
+        var graph = new DirectedGraph<int>(ms);
+
+        Assert.Throws<NegativeEdgeWeightException>(() => graph.Dijkstra(0));
     }
 
     [Fact]
