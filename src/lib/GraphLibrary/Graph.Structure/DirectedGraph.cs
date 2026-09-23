@@ -6,9 +6,9 @@ namespace AVGA.GraphLibrary;
 public class DirectedGraph : GraphBase
 {
     /// <summary>
-    /// Constructs a digraph compatible with data read from stream.
+    /// Constructs an empty digraph reserved for V vertices.
     /// </summary>
-    /// <param name="s">Graph data stream</param>
+    /// <param name="V">Count of vertices</param>
     public DirectedGraph(int V)
         : base(V)
     {}
@@ -37,12 +37,12 @@ public class DirectedGraph : GraphBase
 /// Class representing a directed weighted graph.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-public class DirectedGraph<T> : GraphBase<T> where T : INumber<T>
+public class DirectedGraph<T> : GraphBase<T> where T : INumber<T>, IMinMaxValue<T>
 {
     /// <summary>
-    /// Constructs a weighted digraph compatible with data read from stream.
+    /// Constructs an empty weighted digraph reserved for V vertices.
     /// </summary>
-    /// <param name="s">Graph data stream</param>
+    /// <param name="V">Count of vertices</param>
     public DirectedGraph(int V)
         : base(V)
     {}
