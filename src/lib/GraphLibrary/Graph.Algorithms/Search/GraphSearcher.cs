@@ -94,7 +94,7 @@ public class GraphSearcher
 /// Class with methods which searches a given weighted graph to return edges in a correct order.
 /// </summary>
 /// <typeparam name="T">Type of edges weight</typeparam>
-public class GraphSearcher<T> where T : INumber<T>
+public class GraphSearcher<T> where T : INumber<T>, IMinMaxValue<T>
 {
     /// <summary>
     /// An array of enumerators iterating on a collecion of outgoing edges from vertices.

@@ -4,7 +4,7 @@ namespace AVGA.GraphLibrary;
 /// Interface of methods used for edges weights operations in weighted graphs. 
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-public interface IWeightedGraphMethods<T> : IGraphMethods where T : INumber<T>
+public interface IWeightedGraphMethods<T> : IGraphMethods where T : INumber<T>, IMinMaxValue<T>
 {
     /// <summary>
     /// Returns a weight of the edge if exists.

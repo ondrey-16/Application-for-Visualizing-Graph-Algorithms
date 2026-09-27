@@ -27,7 +27,7 @@ public struct Edge
 /// A structure of weighted graph edge.
 /// </summary>
 /// <typeparam name="T">Type of edge weight.</typeparam>
-public struct Edge<T> where T : INumber<T>
+public struct Edge<T> where T : INumber<T>, IMinMaxValue<T>
 {
      /// <summary>
     /// A vertex which edge goes out.
