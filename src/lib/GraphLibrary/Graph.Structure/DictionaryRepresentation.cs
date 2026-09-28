@@ -52,7 +52,6 @@ public class DictionaryRepresentation : IGraphMethods, ICloneable
         _adjacencyDictionary = new();
 
         string? line;
-        int u, v;
         int maxV = 0;
 
         using StreamReader sr = new(s);
@@ -64,11 +63,11 @@ public class DictionaryRepresentation : IGraphMethods, ICloneable
             {
                 throw new InvalidDataCountException(separated.Count, 2);
             }
-            if (!int.TryParse(separated[0], out u))
+            if (!int.TryParse(separated[0], out int u))
             {
                 throw new InvalidReadTypeException(separated[0]);
             }
-            if (!int.TryParse(separated[1], out v))
+            if (!int.TryParse(separated[1], out int v))
             {
                 throw new InvalidReadTypeException(separated[1]);
             }
@@ -100,7 +99,12 @@ public class DictionaryRepresentation : IGraphMethods, ICloneable
 
         VertexCount = maxV;
     }
-
+    /// <summary>
+    /// Adds the edge to graph's representation if doesn't exist.
+    /// </summary>
+    /// <param name="u">Start of the edge.</param>
+    /// <param name="v">End of the edge.</param>
+    /// <returns>If edge added successfully.</returns>
     public bool AddEdge(int u, int v)
     {
         if (EdgeValidator.CheckIfValid(u, v, VertexCount) 
@@ -181,7 +185,7 @@ public class DictionaryRepresentation : IGraphMethods, ICloneable
 /// Representation of weighted graphs operating on adjacency dictionary.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable where T : INumber<T>, IMinMaxValue<T>
+public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable
 {
     /// <summary>
     /// An adjacency structure.
@@ -231,9 +235,8 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable 
         _adjacencyDictionary = new();
 
         string? line;
-        int u, v;
         int maxV = 0;
-        T w = T.Zero;
+        var converter = TypeDescriptor.GetConverter(typeof(T));
 
         using StreamReader sr = new(s);
 
@@ -244,11 +247,11 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable 
             {
                 throw new InvalidDataCountException(separated.Count, 3);
             }
-            if (!int.TryParse(separated[0], out u))
+            if (!int.TryParse(separated[0], out int u))
             {
                 throw new InvalidReadTypeException(separated[0]);
             }
-            if (!int.TryParse(separated[1], out v))
+            if (!int.TryParse(separated[1], out int v))
             {
                 throw new InvalidReadTypeException(separated[1]);
             }
@@ -274,8 +277,6 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable 
 
             if (separated.Count == 3)
             {
-                var converter = TypeDescriptor.GetConverter(typeof(T));
-
                 if (converter is not null)
                 {
                     T? readW = (T?)converter.ConvertFromString(separated[2]);
@@ -285,25 +286,30 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable 
                         throw new InvalidReadTypeException(separated[2]);
                     }
                     
-                    w = readW;
+                    _adjacencyDictionary[u].Add((v, readW));
+                    _inDegrees[v]++;
+                    _outDegrees[u]++;
+                    EdgeCount++;
                 }
             }
-
-            _adjacencyDictionary[u].Add((v, w));
-            _inDegrees[v]++;
-            _outDegrees[u]++;
-            EdgeCount++;
         }
 
         VertexCount = maxV;
     }
 
-    public bool AddEdge(int u, int v)
+    /// <summary>
+    /// Adds the edge to graph's representation if doesn't exist.
+    /// </summary>
+    /// <param name="u">Start of the edge.</param>
+    /// <param name="v">End of the edge.</param>
+    /// <param name="w">Weight of the edge.</param>
+    /// <returns>If edge added successfully.</returns>
+    public bool AddEdge(int u, int v, T w)
     {
         if (EdgeValidator.CheckIfValid(u, v, VertexCount) 
             && !_adjacencyDictionary[u].Any(e => e.vertex == v))
         {
-            _adjacencyDictionary[u].Add((v, T.Zero));
+            _adjacencyDictionary[u].Add((v, w));
             EdgeCount++;
             _inDegrees[v]++;
             _outDegrees[u]++;

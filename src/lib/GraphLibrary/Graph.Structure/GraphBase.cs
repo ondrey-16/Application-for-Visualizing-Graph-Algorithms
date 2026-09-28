@@ -46,7 +46,7 @@ abstract public class GraphBase : IGraphMethods
 /// Abstract class for weighted graphs objects.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-abstract public class GraphBase<T> : IWeightedGraphMethods<T> where T : INumber<T>, IMinMaxValue<T>
+abstract public class GraphBase<T> : IWeightedGraphMethods<T>
 {
     /// <summary>
     /// A graph representation based on a adjacency dictionary.
@@ -71,7 +71,7 @@ abstract public class GraphBase<T> : IWeightedGraphMethods<T> where T : INumber<
     }
 
     abstract public int EdgeCount { get; }
-    abstract public bool AddEdge(int u, int v);
+    abstract public bool AddEdge(int u, int v, T w);
     abstract public bool RemoveEdge(int u, int v);
     abstract public object Clone();
 

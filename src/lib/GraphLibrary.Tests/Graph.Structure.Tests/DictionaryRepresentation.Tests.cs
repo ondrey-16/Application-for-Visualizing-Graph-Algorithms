@@ -5,7 +5,7 @@ public class DictionaryRepresentationTests
     [Fact]
     public void AddEdge_IncreasesEdgeCountValue()
     {
-        var graph = new DictionaryRepresentation<int>(2);
+        var graph = new DictionaryRepresentation(2);
 
         Assert.True(graph.EdgeCount.Equals(0));
         Assert.True(graph.AddEdge(0, 1));
@@ -17,7 +17,7 @@ public class DictionaryRepresentationTests
     [Fact]
     public void AddEdge_FalseAfterAddingExistingEdge()
     {
-        var graph = new DictionaryRepresentation<int>(2);
+        var graph = new DictionaryRepresentation(2);
 
         Assert.True(graph.AddEdge(0, 1));
         Assert.False(graph.AddEdge(0, 1));
@@ -26,7 +26,7 @@ public class DictionaryRepresentationTests
     [Fact]
     public void RemoveEdge_DecreasesEdgeCountValue()
     {
-        var graph = new DictionaryRepresentation<int>(2);
+        var graph = new DictionaryRepresentation(2);
 
         Assert.True(graph.EdgeCount.Equals(0));
         Assert.True(graph.AddEdge(0, 1));
@@ -49,8 +49,8 @@ public class DictionaryRepresentationTests
         var graph1 = new DictionaryRepresentation<int>(2);
         var graph2 = new DictionaryRepresentation<float>(2);
 
-        Assert.True(graph1.AddEdge(0, 1));
-        Assert.True(graph2.AddEdge(0, 1));
+        Assert.True(graph1.AddEdge(0, 1, 0));
+        Assert.True(graph2.AddEdge(0, 1, 0.0f));
 
         Assert.True(graph1.GetEdgeWeight(0, 1).Equals(0));
         Assert.True(graph2.GetEdgeWeight(0, 1).Equals(0.0f));
@@ -69,7 +69,7 @@ public class DictionaryRepresentationTests
     [Fact]
     public void GetNeighbours_ReturnsCorrectCollection()
     {
-        var graph = new DictionaryRepresentation<int>(3);
+        var graph = new DictionaryRepresentation(3);
 
         Assert.True(graph.AddEdge(0, 1));
         Assert.True(graph.AddEdge(0, 2));
@@ -85,10 +85,8 @@ public class DictionaryRepresentationTests
     {
         var graph = new DictionaryRepresentation<int>(3);
 
-        Assert.True(graph.AddEdge(0, 1));
-        graph.SetEdgeWeight(0, 1, 3);
-        Assert.True(graph.AddEdge(0, 2));
-        graph.SetEdgeWeight(0, 2, 4);
+        Assert.True(graph.AddEdge(0, 1, 3));
+        Assert.True(graph.AddEdge(0, 2, 4));
 
         var edges = graph.GetOutEdges(0);
 
@@ -99,7 +97,7 @@ public class DictionaryRepresentationTests
     [Fact]
     public void GetInDegree_ReturnsCorrectValue()
     {
-        var graph = new DictionaryRepresentation<int>(3);
+        var graph = new DictionaryRepresentation(3);
 
         Assert.True(graph.AddEdge(0, 1));
         Assert.True(graph.AddEdge(2, 1));
@@ -110,7 +108,7 @@ public class DictionaryRepresentationTests
     [Fact]
     public void GetOutDegree_ReturnsCorrectValue()
     {
-        var graph = new DictionaryRepresentation<int>(3);
+        var graph = new DictionaryRepresentation(3);
 
         Assert.True(graph.AddEdge(0, 1));
         Assert.True(graph.AddEdge(0, 2));
@@ -123,9 +121,7 @@ public class DictionaryRepresentationTests
     {
         var graph = new DictionaryRepresentation<int>(2);
 
-        Assert.True(graph.AddEdge(0, 1));
-
-        graph.SetEdgeWeight(0, 1, 3);
+        Assert.True(graph.AddEdge(0, 1, 3));
 
         Assert.True(graph.GetEdgeWeight(0, 1).Equals(3));
     }
@@ -135,7 +131,7 @@ public class DictionaryRepresentationTests
     {
         var graph = new DictionaryRepresentation<int>(2);
 
-        Assert.True(graph.AddEdge(0, 1));
+        Assert.True(graph.AddEdge(0, 1, 1));
 
         Assert.Throws<InvalidEdgeException>(() => graph.SetEdgeWeight(0, 2, 3));
         Assert.Throws<NonExistingEdgeException>(() => graph.SetEdgeWeight(1, 0, 3));
@@ -144,7 +140,7 @@ public class DictionaryRepresentationTests
     [Fact]
     public void HasEdge_CheckingEdgesCorrectly()
     {
-        var graph = new DictionaryRepresentation<int>(2);
+        var graph = new DictionaryRepresentation(2);
 
         Assert.True(graph.AddEdge(0, 1));
 

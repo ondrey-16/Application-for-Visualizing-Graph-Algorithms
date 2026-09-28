@@ -20,12 +20,10 @@ public static class JohnsonGraphExtender
         {
             foreach (var edge in graph.GetOutEdges(i))
             {
-                tmpGraph.AddEdge(edge.From, edge.To);
-                tmpGraph.SetEdgeWeight(edge.From, edge.To, edge.Weight);
-                newWeightedGraph.AddEdge(edge.From, edge.To);
-                newWeightedGraph.SetEdgeWeight(edge.From, edge.To, edge.Weight);
+                tmpGraph.AddEdge(edge.From, edge.To, edge.Weight);
+                newWeightedGraph.AddEdge(edge.From, edge.To, edge.Weight);
             }
-            tmpGraph.AddEdge(graph.VertexCount, i);
+            tmpGraph.AddEdge(graph.VertexCount, i, T.Zero);
         }
 
         Paths<T> tmpPaths = tmpGraph.BellmanFord(graph.VertexCount);
