@@ -59,7 +59,7 @@ public class Graph : GraphBase
 /// Class representing a weighted basic graph.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-public class Graph<T> : GraphBase<T> where T : INumber<T>, IMinMaxValue<T>
+public class Graph<T> : GraphBase<T>
 {
     /// <summary>
     /// Constructs an empty basic weighted graph reserved for V vertices..
@@ -86,18 +86,17 @@ public class Graph<T> : GraphBase<T> where T : INumber<T>, IMinMaxValue<T>
 
         foreach ((int u, int v, T w) in allEdges)
         {
-            if (!_representation.AddEdge(v, u))
+            if (!_representation.AddEdge(v, u, w))
             {
                 throw new DuplicatedEdgeException(v, u);
             }
-            _representation.SetEdgeWeight(v, u, w);
         }
     }
 
     public override int EdgeCount => _representation.EdgeCount / 2;
 
-    public override bool AddEdge(int u, int v) 
-        => _representation.AddEdge(u, v) && _representation.AddEdge(v, u);
+    public override bool AddEdge(int u, int v, T w) 
+        => _representation.AddEdge(u, v, w) && _representation.AddEdge(v, u, w);
 
     public override bool RemoveEdge(int u, int v)
         => _representation.RemoveEdge(u, v) && _representation.RemoveEdge(v, u);
