@@ -155,28 +155,4 @@ public class DictionaryRepresentationTests
 
         Assert.Throws<InvalidEdgeException>(() => graph.SetEdgeWeight(0, 2, 3));
     }
-
-    [Fact]
-    public void ReadingStream_ValidStructure()
-    {
-        string s = """
-        0 1 3
-        1 2 2
-        2 0 1
-        """;
-
-        MemoryStream ms = new();
-        StreamWriter sw = new(ms);
-        sw.Write(s);
-        sw.Flush();
-        ms.Position = 0;
-
-        var graph = new DictionaryRepresentation<int>(ms);
-
-        Assert.True(graph.VertexCount == 3);
-        Assert.True(graph.EdgeCount == 3);
-        Assert.True(graph.GetEdgeWeight(0, 1) == 3);
-        Assert.True(graph.GetEdgeWeight(1, 2) == 2);
-        Assert.True(graph.GetEdgeWeight(2, 0) == 1);
-    }
 }

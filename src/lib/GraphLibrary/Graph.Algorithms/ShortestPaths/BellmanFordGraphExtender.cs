@@ -14,7 +14,7 @@ public static class BellmanFordGraphExtender
     /// <param name="source">A vertex from which shortest paths are being found.</param>
     /// <param name="paths">Object of found paths information.</param>
     /// <returns>Object with found shortest paths information.</returns>
-    /// <exception cref="NegativeCycleException">Thrown when a nagative cycle was detected.</exception>
+    /// <exception cref="NegativeCycleException">Thrown when a negative cycle was detected.</exception>
     public static Paths<T> BellmanFord<T>(this GraphBase<T> graph, int source, Paths<T>? paths = null) where T : INumber<T>, IMinMaxValue<T>
     {
         if (paths is null)

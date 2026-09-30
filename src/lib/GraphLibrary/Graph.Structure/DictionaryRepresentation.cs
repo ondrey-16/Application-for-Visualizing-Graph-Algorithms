@@ -228,7 +228,7 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable
     /// <exception cref="InvalidDataCountException">Thrown when in read data line there is an invalid count of balid variables.</exception>
     /// <exception cref="InvalidReadTypeException">Thrown when a variable cannot be parsed from read stream.</exception>
     /// <exception cref="DuplicatedEdgeException">Thrown when an edge appears while reading more than one time.</exception>
-    public DictionaryRepresentation(Stream s)
+    public DictionaryRepresentation(Stream s, Func<List<string>, T> weightReader)
     {
         _inDegrees = new();
         _outDegrees = new();
@@ -236,14 +236,13 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable
 
         string? line;
         int maxV = 0;
-        var converter = TypeDescriptor.GetConverter(typeof(T));
 
         using StreamReader sr = new(s);
 
         while ((line = sr.ReadLine()) is not null)
         {
             var separated = line.Split( ).ToList();
-            if (separated.Count != 3)
+            if (separated.Count < 3)
             {
                 throw new InvalidDataCountException(separated.Count, 3);
             }
@@ -274,24 +273,18 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable
             {
                 throw new DuplicatedEdgeException(u, v);
             }
-
-            if (separated.Count == 3)
+            
+            List<string> weightParts = new();
+            for (int i = 2; i < separated.Count; i++)
             {
-                if (converter is not null)
-                {
-                    T? readW = (T?)converter.ConvertFromString(separated[2]);
-
-                    if (readW is null)
-                    {
-                        throw new InvalidReadTypeException(separated[2]);
-                    }
-                    
-                    _adjacencyDictionary[u].Add((v, readW));
-                    _inDegrees[v]++;
-                    _outDegrees[u]++;
-                    EdgeCount++;
-                }
+                weightParts.Add(separated[i]);
             }
+
+            T readW = weightReader(weightParts);
+            _adjacencyDictionary[u].Add((v, readW));
+            _inDegrees[v]++;
+            _outDegrees[u]++;
+            EdgeCount++;
         }
 
         VertexCount = maxV;
