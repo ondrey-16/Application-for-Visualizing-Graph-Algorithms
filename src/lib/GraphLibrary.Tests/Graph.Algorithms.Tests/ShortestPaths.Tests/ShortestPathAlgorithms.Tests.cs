@@ -50,6 +50,31 @@ public class ShortestPathAlgorithmsTests
     }
 
     [Fact]
+    public void NegativeCycle_ReturnsValidCycleWithNegativeWeight()
+    {
+        string s = """
+        0 1 -1
+        2 0 -2
+        1 2 -2
+        """;
+
+        MemoryStream ms = new();
+        StreamWriter sw = new(ms);
+        sw.Write(s);
+        sw.Flush();
+        ms.Position = 0;
+
+        var graph = new DirectedGraph<int>(ms);
+
+        var cycle = graph.NegativeCycle();
+
+        Assert.True(cycle?.Count == 3);
+        Assert.True(graph.HasEdge(cycle[0], cycle[1]));
+        Assert.True(graph.HasEdge(cycle[1], cycle[2]));
+        Assert.True(graph.HasEdge(cycle[2], cycle[0]));
+    }
+
+    [Fact]
     public void Dijkstra_ReturnsCorrectPath()
     {
         string s = """
@@ -207,5 +232,30 @@ public class ShortestPathAlgorithmsTests
         Assert.True(path03[1] == 2);
         Assert.True(path03[2] == 3);
         Assert.True(paths.GetDistance(0, 3) == 2);
+    }
+
+    [Fact]
+    public void DFS_ReturnsCorrectPath()
+    {
+        string s = """
+        0 1 1
+        0 3 1
+        1 2 1
+        """;
+
+        MemoryStream ms = new();
+        StreamWriter sw = new(ms);
+        sw.Write(s);
+        sw.Flush();
+        ms.Position = 0;
+
+        var graph = new DirectedGraph<int>(ms);
+
+        var path = graph.GetPathDFS(0, 2);
+
+        Assert.True(path?.Count == 3);
+        Assert.True(path[0] == 0);
+        Assert.True(path[1] == 1);
+        Assert.True(path[2] == 2);
     }
 }

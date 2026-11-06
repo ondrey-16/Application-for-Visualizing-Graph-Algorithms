@@ -16,6 +16,6 @@ public static class DFSGraphExtender
     /// Returns an object of graph searcher with a stack structure to invoke DFS search methods.
     /// </summary>
     /// <param name="graph">A weighted graph to search.</param>
-    public static GraphSearcher<T> DFS<T>(this GraphBase<T> graph) where T : INumber<T>, IMinMaxValue<T>
+    public static GraphSearcher<T> DFS<T>(this GraphBase<T> graph)
         => new GraphSearcher<T>(new Stack<int>(), graph);
 }

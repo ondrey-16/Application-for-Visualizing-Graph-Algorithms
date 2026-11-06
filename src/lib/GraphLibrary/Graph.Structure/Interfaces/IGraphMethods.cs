@@ -16,14 +16,6 @@ public interface IGraphMethods
     public int EdgeCount { get; }
 
     /// <summary>
-    /// Adds the edge to graph's representation if doesn't exist.
-    /// </summary>
-    /// <param name="u">Start of the edge.</param>
-    /// <param name="v">End of the edge.</param>
-    /// <returns>If edge added successfully.</returns>
-    public bool AddEdge(int u, int v);
-
-    /// <summary>
     /// Removes the edge if exists.
     /// </summary>
     /// <param name="u">Start of the edge.</param>

@@ -46,7 +46,7 @@ abstract public class GraphBase : IGraphMethods
 /// Abstract class for weighted graphs objects.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-abstract public class GraphBase<T> : IWeightedGraphMethods<T> where T : INumber<T>, IMinMaxValue<T>
+abstract public class GraphBase<T> : IWeightedGraphMethods<T>
 {
     /// <summary>
     /// A graph representation based on a adjacency dictionary.
@@ -67,11 +67,11 @@ abstract public class GraphBase<T> : IWeightedGraphMethods<T> where T : INumber<
     /// <param name="s">Graph data stream</param>
     public GraphBase(Stream s)
     {
-        _representation = new DictionaryRepresentation<T>(s);
+        _representation = new DictionaryRepresentation<T>(s, WeightReader);
     }
 
     abstract public int EdgeCount { get; }
-    abstract public bool AddEdge(int u, int v);
+    abstract public bool AddEdge(int u, int v, T w);
     abstract public bool RemoveEdge(int u, int v);
     abstract public object Clone();
 
@@ -83,4 +83,36 @@ abstract public class GraphBase<T> : IWeightedGraphMethods<T> where T : INumber<
     public IEnumerable<Edge<T>> GetOutEdges(int v) => _representation.GetOutEdges(v);
     public T GetEdgeWeight(int u, int v) => _representation.GetEdgeWeight(u, v);
     public void SetEdgeWeight(int u, int v, T w) => _representation.SetEdgeWeight(u, v, w);
+
+    /// <summary>
+    /// Tries to convert edge weight value from text to provided type.
+    /// </summary>
+    /// <param name="weightParts">A list of string values representing edge weight.</param>
+    /// <returns>A read value of edge weight.</returns>
+    /// <exception cref="InvalidDataCountException">Thrown if there is an invalid weightParts count.</exception>
+    /// <exception cref="InvalidReadTypeException">Thrown if a value was wrongly converted.</exception>
+    /// <exception cref="TypeCannotBeReadException{T}">Thrown if a value cannot be converted to provided type.</exception>
+    protected virtual T WeightReader(List<string> weightParts)
+    {
+        if (weightParts.Count != 1)
+        {
+            throw new InvalidDataCountException(weightParts.Count + 2, 3);
+        }
+
+        var converter = TypeDescriptor.GetConverter(typeof(T));
+
+        if (converter is not null)
+        {
+            T? readW = (T?)converter.ConvertFromString(weightParts[0]);
+
+            if (readW is null)
+            {
+                throw new InvalidReadTypeException(weightParts[0]);
+            }
+            
+            return readW;
+        }
+        
+        throw new TypeCannotBeReadException<T>();
+    }
 }
