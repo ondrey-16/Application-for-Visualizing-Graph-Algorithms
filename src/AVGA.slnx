@@ -1,6 +1,12 @@
 <Solution>
+  <Folder Name="/app/">
+    <Project Path="app/GUIApp/GUIApp.csproj" />
+  </Folder>
   <Folder Name="/lib/">
     <Project Path="lib/GraphLibrary.Tests/GraphLibrary.Tests.csproj" />
     <Project Path="lib/GraphLibrary/GraphLibrary.csproj" />
+  </Folder>
+  <Folder Name="/vis-lib/">
+    <Project Path="vis-lib/GraphVisControlLibrary/GraphVisControlLibrary.csproj" />
   </Folder>
 </Solution>
