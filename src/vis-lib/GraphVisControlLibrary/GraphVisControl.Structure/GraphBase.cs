@@ -11,12 +11,15 @@ abstract public class GraphBase : IGraphMethods
     /// </summary>
     protected DictionaryRepresentation _representation;
 
+    public List<IGraphEvent> GraphEvents {get; private set;}
+
     /// <summary>
     /// Constructs an empty graph reserved for V vertices.
     /// </summary>
     /// <param name="V">Count of vertices.</param>
     public GraphBase(int V)
     {
+        GraphEvents = new List<IGraphEvent>();
         _representation = new DictionaryRepresentation(V);
     }
     /// <summary>
@@ -25,6 +28,7 @@ abstract public class GraphBase : IGraphMethods
     /// <param name="s">Graph data stream</param>
     public GraphBase(Stream s)
     {
+        GraphEvents = new List<IGraphEvent>();
         _representation = new DictionaryRepresentation(s);
     }
 
@@ -53,12 +57,15 @@ abstract public class GraphBase<T> : IWeightedGraphMethods<T>
     /// </summary>
     protected DictionaryRepresentation<T> _representation;
 
+    public List<IGraphEvent> GraphEvents {get; private set;}
+
     /// <summary>
     /// Constructs a weighted graph reserved for V vertices.
     /// </summary>
     /// <param name="V">Count of vertices.</param>
     public GraphBase(int V)
     {
+        GraphEvents = new List<IGraphEvent>();
         _representation = new DictionaryRepresentation<T>(V);
     }
     /// <summary>
@@ -67,6 +74,7 @@ abstract public class GraphBase<T> : IWeightedGraphMethods<T>
     /// <param name="s">Graph data stream</param>
     public GraphBase(Stream s)
     {
+        GraphEvents = new List<IGraphEvent>();
         _representation = new DictionaryRepresentation<T>(s, WeightReader);
     }
 

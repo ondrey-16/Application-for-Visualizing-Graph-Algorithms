@@ -53,24 +53,27 @@ public class GraphSearcher
         int currV, to;
         _enumerators[v] = _graph.GetOutEdges(v).GetEnumerator();
         _O.Push(v);
+        _graph.GraphEvents.Add(new VertexVisitedEvent(v));
 
         try
         {
             while (!_O.IsEmpty())
             {
                 currV = _O.Peek();
-                to = _enumerators[currV].Current.To;
 
                 if (!_enumerators[currV].MoveNext())
                 {
                     _O.Pop();
                     continue;
                 }
+                to = _enumerators[currV].Current.To;
+                _graph.GraphEvents.Add(new EdgeTraversedEvent(currV, to));
 
-                if (_enumerators[_enumerators[currV].Current.To] is null)
+                if (_enumerators[to] is null)
                 {
-                    _enumerators[_enumerators[currV].Current.To] = _graph.GetOutEdges(_enumerators[currV].Current.To).GetEnumerator();
-                    _O.Push(_enumerators[currV].Current.To);
+                    _graph.GraphEvents.Add(new VertexVisitedEvent(to));
+                    _enumerators[to] = _graph.GetOutEdges(to).GetEnumerator();
+                    _O.Push(to);
                 }
 
                 yield return _enumerators[currV].Current;
@@ -141,9 +144,10 @@ public class GraphSearcher<T>
     /// <returns>A collection of searched edges in a correct order.</returns>
     public IEnumerable<Edge<T>> SearchFrom(int v)
     {
-        int currV;
+        int currV, to;
         _enumerators[v] = _graph.GetOutEdges(v).GetEnumerator();
         _O.Push(v);
+        _graph.GraphEvents.Add(new VertexVisitedEvent(v));
 
         try
         {
@@ -156,11 +160,14 @@ public class GraphSearcher<T>
                     _O.Pop();
                     continue;
                 }
+                to = _enumerators[currV].Current.To;
+                _graph.GraphEvents.Add(new EdgeTraversedEvent(currV, to));
 
-                if (_enumerators[_enumerators[currV].Current.To] is null)
+                if (_enumerators[to] is null)
                 {
-                    _enumerators[_enumerators[currV].Current.To] = _graph.GetOutEdges(_enumerators[currV].Current.To).GetEnumerator();
-                    _O.Push(_enumerators[currV].Current.To);
+                    _graph.GraphEvents.Add(new VertexVisitedEvent(to));
+                    _enumerators[to] = _graph.GetOutEdges(to).GetEnumerator();
+                    _O.Push(to);
                 }
 
                 yield return _enumerators[currV].Current;
