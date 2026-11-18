@@ -50,9 +50,9 @@ public class Network<T> : DirectedGraph<T> where T : INumber<T>
 
     public override object Clone()
     {
-        Network<T> cloned = new(this.VertexCount);
-        cloned._representation = (DictionaryRepresentation<T>)this._representation.Clone();
-        cloned.Flow = (DirectedGraph<T>)this.Flow.Clone();
+        Network<T> cloned = new(VertexCount);
+        cloned._representation = (DictionaryRepresentation<T>)_representation.Clone();
+        cloned.Flow = (DirectedGraph<T>)Flow.Clone();
 
         return cloned;
     }

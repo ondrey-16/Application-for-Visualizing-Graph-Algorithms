@@ -1,8 +1,8 @@
 namespace AVGA.GraphVisControlLibrary;
 
-public class NonExistingEdgeException: Exception
+public class NonExistingEdgeException : Exception
 {
-    public NonExistingEdgeException(int u, int v) 
-        : base($"Edge ({u}, {v}) does not exist.") 
-    {}
+    public NonExistingEdgeException(int u, int v)
+        : base($"Edge ({u}, {v}) does not exist.")
+    { }
 }

@@ -12,7 +12,7 @@ public static class MinCostMaxFlowCostNetworkExtender
     /// <param name="target">Network target vertex.</param>
     /// <returns></returns>
     /// <exception cref="NegativeEdgeWeightException"></exception>
-    public static (TCapacity flow, TCost Cost) MinCostMaxFlow<TCapacity, TCost>(this CostNetwork<TCapacity, TCost> network, int source, int target) 
+    public static (TCapacity flow, TCost Cost) MinCostMaxFlow<TCapacity, TCost>(this CostNetwork<TCapacity, TCost> network, int source, int target)
         where TCapacity : INumber<TCapacity>, IMinMaxValue<TCapacity>
         where TCost : INumber<TCost>, IMinMaxValue<TCost>
     {
@@ -83,7 +83,7 @@ public static class MinCostMaxFlowCostNetworkExtender
                     currC = network.Flow.GetEdgeWeight(to, from);
                     network.Flow.SetEdgeWeight(to, from, currC - Delta);
                 }
-                
+
                 TCapacity front = residual.GetEdgeWeight(from, to) - Delta;
                 if (front == TCapacity.Zero)
                 {

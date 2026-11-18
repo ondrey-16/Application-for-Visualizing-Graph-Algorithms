@@ -58,7 +58,7 @@ public class DictionaryRepresentation : IGraphMethods, ICloneable
 
         while ((line = sr.ReadLine()) is not null)
         {
-            var separated = line.Split( ).ToList();
+            var separated = line.Split().ToList();
             if (separated.Count != 2)
             {
                 throw new InvalidDataCountException(separated.Count, 2);
@@ -107,7 +107,7 @@ public class DictionaryRepresentation : IGraphMethods, ICloneable
     /// <returns>If edge added successfully.</returns>
     public bool AddEdge(int u, int v)
     {
-        if (EdgeValidator.CheckIfValid(u, v, VertexCount) 
+        if (EdgeValidator.CheckIfValid(u, v, VertexCount)
             && !_adjacencyDictionary[u].Any(e => e == v))
         {
             _adjacencyDictionary[u].Add(v);
@@ -122,13 +122,13 @@ public class DictionaryRepresentation : IGraphMethods, ICloneable
     }
     public bool RemoveEdge(int u, int v)
     {
-        if (EdgeValidator.CheckIfValid(u, v, VertexCount) 
+        if (EdgeValidator.CheckIfValid(u, v, VertexCount)
             && _adjacencyDictionary[u].Remove(v))
         {
             EdgeCount--;
             _inDegrees[v]--;
             _outDegrees[u]--;
-            
+
             return true;
         }
 
@@ -162,8 +162,8 @@ public class DictionaryRepresentation : IGraphMethods, ICloneable
     {
         DictionaryRepresentation cloned = new(VertexCount);
 
-        cloned._adjacencyDictionary = new(this._adjacencyDictionary);
-        cloned.EdgeCount = this.EdgeCount;
+        cloned._adjacencyDictionary = new(_adjacencyDictionary);
+        cloned.EdgeCount = EdgeCount;
 
         return cloned;
     }
@@ -241,7 +241,7 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable
 
         while ((line = sr.ReadLine()) is not null)
         {
-            var separated = line.Split( ).ToList();
+            var separated = line.Split().ToList();
             if (separated.Count < 3)
             {
                 throw new InvalidDataCountException(separated.Count, 3);
@@ -273,7 +273,7 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable
             {
                 throw new DuplicatedEdgeException(u, v);
             }
-            
+
             List<string> weightParts = new();
             for (int i = 2; i < separated.Count; i++)
             {
@@ -299,7 +299,7 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable
     /// <returns>If edge added successfully.</returns>
     public bool AddEdge(int u, int v, T w)
     {
-        if (EdgeValidator.CheckIfValid(u, v, VertexCount) 
+        if (EdgeValidator.CheckIfValid(u, v, VertexCount)
             && !_adjacencyDictionary[u].Any(e => e.vertex == v))
         {
             _adjacencyDictionary[u].Add((v, w));
@@ -314,14 +314,14 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable
     }
     public bool RemoveEdge(int u, int v)
     {
-        if (EdgeValidator.CheckIfValid(u, v, VertexCount) 
+        if (EdgeValidator.CheckIfValid(u, v, VertexCount)
             && _adjacencyDictionary[u].Any(e => e.vertex == v))
         {
             _adjacencyDictionary[u].Remove(_adjacencyDictionary[u].First(e => e.vertex == v));
             EdgeCount--;
             _inDegrees[v]--;
             _outDegrees[u]--;
-            
+
             return true;
         }
 
@@ -372,7 +372,7 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable
     {
         if (EdgeValidator.CheckIfValid(u, v, VertexCount))
         {
-           return _adjacencyDictionary[u].Any(e => e.vertex == v);
+            return _adjacencyDictionary[u].Any(e => e.vertex == v);
         }
 
         return false;
@@ -381,8 +381,8 @@ public class DictionaryRepresentation<T> : IWeightedGraphMethods<T>, ICloneable
     {
         DictionaryRepresentation<T> cloned = new(VertexCount);
 
-        cloned._adjacencyDictionary = new(this._adjacencyDictionary);
-        cloned.EdgeCount = this.EdgeCount;
+        cloned._adjacencyDictionary = new(_adjacencyDictionary);
+        cloned.EdgeCount = EdgeCount;
 
         return cloned;
     }

@@ -10,16 +10,16 @@ public class Paths<T> where T : INumber<T>, IMinMaxValue<T>
     /// Two-dimensional array of vertices preceding on a path. For example, a value of _prev[i][j] tells us 
     /// what vertex precedes a j-vertex on a path starting i-vertex. _prev[i][j] = -1 means that there is no previous vertex.
     /// </summary>
-    private int[][] _prev;
+    private readonly int[][] _prev;
     /// <summary>
     /// Two-dimensional array of shortest distances from one vertex to another. For example, a value of _dist[i][j] tells us 
     /// what distance is on a path from i-vertex to j-vertex.
     /// </summary>
-    private T[][] _dist;
+    private readonly T[][] _dist;
     /// <summary>
     /// Count of vertices.
     /// </summary>
-    private int _V;
+    private readonly int _V;
 
     public Paths(int V)
     {

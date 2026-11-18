@@ -5,8 +5,8 @@ namespace AVGA.GraphVisControlLibrary;
 /// </summary>
 /// <typeparam name="TCapacity">Type of capacity. Must implement INumber interface.</typeparam>
 /// <typeparam name="TCost">Type of cost. Must implement INumber interface.</typeparam>
-public class CostNetwork<TCapacity, TCost> : DirectedGraph<(TCapacity Capacity, TCost Cost)> 
-    where TCapacity : INumber<TCapacity> 
+public class CostNetwork<TCapacity, TCost> : DirectedGraph<(TCapacity Capacity, TCost Cost)>
+    where TCapacity : INumber<TCapacity>
     where TCost : INumber<TCost>
 {
     /// <summary>
@@ -52,9 +52,9 @@ public class CostNetwork<TCapacity, TCost> : DirectedGraph<(TCapacity Capacity, 
     }
     public override object Clone()
     {
-        CostNetwork<TCapacity, TCost> cloned = new(this.VertexCount);
-        cloned._representation = (DictionaryRepresentation<(TCapacity, TCost)>)this._representation.Clone();
-        cloned.Flow = (DirectedGraph<TCapacity>)this.Flow.Clone();
+        CostNetwork<TCapacity, TCost> cloned = new(VertexCount);
+        cloned._representation = (DictionaryRepresentation<(TCapacity, TCost)>)_representation.Clone();
+        cloned.Flow = (DirectedGraph<TCapacity>)Flow.Clone();
 
         return cloned;
     }

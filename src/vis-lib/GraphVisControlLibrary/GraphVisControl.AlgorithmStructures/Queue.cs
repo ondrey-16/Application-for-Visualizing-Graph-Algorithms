@@ -9,7 +9,7 @@ public class Queue<T> : IOrderStructure<T>
     /// <summary>
     /// A FIFO queue.
     /// </summary>
-    private System.Collections.Generic.Queue<T> _Q;
+    private readonly System.Collections.Generic.Queue<T> _Q;
 
     public Queue()
     {

@@ -8,15 +8,15 @@ public class GraphSearcher
     /// <summary>
     /// An array of enumerators iterating on a collecion of outgoing edges from vertices.
     /// </summary>
-    private IEnumerator<Edge>[] _enumerators;
+    private readonly IEnumerator<Edge>[] _enumerators;
     /// <summary>
     /// A structure storing visited vertices in a right order.
     /// </summary>
-    private IOrderStructure<int> _O;
+    private readonly IOrderStructure<int> _O;
     /// <summary>
     /// A searched graph.
     /// </summary>
-    private GraphBase _graph;
+    private readonly GraphBase _graph;
 
     public GraphSearcher(IOrderStructure<int> O, GraphBase graph)
     {
@@ -102,15 +102,15 @@ public class GraphSearcher<T>
     /// <summary>
     /// An array of enumerators iterating on a collecion of outgoing edges from vertices.
     /// </summary>
-    private IEnumerator<Edge<T>>[] _enumerators;
+    private readonly IEnumerator<Edge<T>>[] _enumerators;
     /// <summary>
     /// A structure storing visited vertices in a right order.
     /// </summary>
-    private IOrderStructure<int> _O;
+    private readonly IOrderStructure<int> _O;
     /// <summary>
     /// A searched graph.
     /// </summary>
-    private GraphBase<T> _graph;
+    private readonly GraphBase<T> _graph;
 
     public GraphSearcher(IOrderStructure<int> O, GraphBase<T> graph)
     {

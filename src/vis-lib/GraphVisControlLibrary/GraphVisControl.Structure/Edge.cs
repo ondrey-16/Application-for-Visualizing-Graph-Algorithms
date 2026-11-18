@@ -29,11 +29,11 @@ public struct Edge
 /// <typeparam name="T">Type of edge weight.</typeparam>
 public struct Edge<T>
 {
-     /// <summary>
+    /// <summary>
     /// A vertex which edge goes out.
     /// </summary>
     public int From { get; }
-    
+
     /// <summary>
     /// A vertex which edge comes in.
     /// </summary>

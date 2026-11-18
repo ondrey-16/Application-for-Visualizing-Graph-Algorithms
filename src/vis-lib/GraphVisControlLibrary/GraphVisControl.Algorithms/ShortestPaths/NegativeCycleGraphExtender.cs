@@ -40,7 +40,7 @@ public static class NegativeCycleGraphExtender
                 }
             }
         }
-        
+
         if (changed == -1)
         {
             return null;
@@ -59,7 +59,7 @@ public static class NegativeCycleGraphExtender
         while (currU != u)
         {
             cycle.AddFirst(currU);
-            currU = paths.GetPrevious(source,currU);
+            currU = paths.GetPrevious(source, currU);
         }
 
         return cycle.ToList();

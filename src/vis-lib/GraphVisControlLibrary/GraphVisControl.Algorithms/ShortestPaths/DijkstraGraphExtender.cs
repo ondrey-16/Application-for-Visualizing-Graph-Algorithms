@@ -48,7 +48,7 @@ public static class DijkstraGraphExtender
                 }
                 if (paths.IsReachable(source, u))
                 {
-                    if (!paths.IsReachable(source, edge.To) || 
+                    if (!paths.IsReachable(source, edge.To) ||
                         paths.GetDistance(source, edge.To) > paths.GetDistance(source, u) + edge.Weight)
                     {
                         paths.AddPathNode(source, edge.To, u, paths.GetDistance(source, u) + edge.Weight);

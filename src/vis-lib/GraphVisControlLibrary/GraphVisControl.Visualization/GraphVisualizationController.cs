@@ -2,7 +2,7 @@ namespace AVGA.GraphVisControlLibrary;
 
 public class GraphVisualizationController
 {
-    private List<IGraphEvent> _graphEvents;
+    private readonly List<IGraphEvent> _graphEvents;
     public int CurrentStep { get; private set; }
 
     public GraphVisualizationController(List<IGraphEvent> graphEvents)
@@ -17,7 +17,7 @@ public class GraphVisualizationController
         {
             CurrentStep++;
         }
-    } 
+    }
     public void PreviousStep()
     {
         if (CurrentStep > 0)

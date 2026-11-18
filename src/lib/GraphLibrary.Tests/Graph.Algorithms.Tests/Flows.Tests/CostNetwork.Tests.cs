@@ -18,7 +18,7 @@ public class CostNetworkTests
         ms.Position = 0;
 
         var network = new CostNetwork<int, int>(ms);
-        
+
         Assert.True(network.VertexCount == 4);
         Assert.True(network.Flow.VertexCount == 4);
         Assert.True(network.EdgeCount == 3);
