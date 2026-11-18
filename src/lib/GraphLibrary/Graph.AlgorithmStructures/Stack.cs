@@ -9,7 +9,7 @@ public class Stack<T> : IOrderStructure<T>
     /// <summary>
     /// A LIFO stack.
     /// </summary>
-    private System.Collections.Generic.Stack<T> _S;
+    private readonly System.Collections.Generic.Stack<T> _S;
 
     public Stack()
     {

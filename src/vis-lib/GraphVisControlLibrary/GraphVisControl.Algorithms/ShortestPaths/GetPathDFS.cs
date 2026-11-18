@@ -13,7 +13,7 @@ public static class GetPathDFSGraphExtender
     {
         if (source == target)
         {
-            return new List<int>{source};
+            return new List<int> { source };
         }
         Paths<int> paths = new(graph.VertexCount);
         paths.InitSourceRow(source);
@@ -50,7 +50,7 @@ public static class GetPathDFSGraphExtender
     {
         if (source == target)
         {
-            return new List<int>{source};
+            return new List<int> { source };
         }
         Paths<int> paths = new(graph.VertexCount);
         paths.InitSourceRow(source);

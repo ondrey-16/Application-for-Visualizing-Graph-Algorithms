@@ -22,7 +22,7 @@ public class GraphTests
         Assert.True(graph.VertexCount == 3);
         Assert.True(graph.EdgeCount == 3);
 
-        var cloned = (Graph) graph.Clone();
+        var cloned = (Graph)graph.Clone();
 
         Assert.True(cloned.HasEdge(0, 1));
         Assert.True(cloned.HasEdge(1, 0));
@@ -58,7 +58,7 @@ public class GraphTests
         Assert.True(graph.GetEdgeWeight(2, 0) == 1);
         Assert.True(graph.GetEdgeWeight(0, 2) == 1);
 
-        var cloned = (Graph<int>) graph.Clone();
+        var cloned = (Graph<int>)graph.Clone();
 
         Assert.True(cloned.GetEdgeWeight(0, 1) == 3);
         Assert.True(cloned.GetEdgeWeight(1, 2) == 2);

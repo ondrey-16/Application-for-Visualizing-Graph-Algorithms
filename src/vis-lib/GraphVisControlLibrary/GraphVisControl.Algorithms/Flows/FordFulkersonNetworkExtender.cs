@@ -47,7 +47,7 @@ public static class FordFulkersonNetworkExtender
     /// <returns>Value of found maximum flow</returns>
     /// <exception cref="SourceTargetEqualException">Thrown if source and target vertices are equal.</exception>
     /// <exception cref="NegativeEdgeWeightException">Thrown if an edge with negative capacity has been detected.</exception>
-    public static TCapacity FordFulkerson<TCapacity, TCost>(this CostNetwork<TCapacity, TCost> 
+    public static TCapacity FordFulkerson<TCapacity, TCost>(this CostNetwork<TCapacity, TCost>
         network, int source, int target) where TCapacity : INumber<TCapacity> where TCost : INumber<TCost>
     {
         if (source == target)
@@ -85,7 +85,7 @@ public static class FordFulkersonNetworkExtender
     /// <param name="flow">Flow graph.</param>
     /// <param name="network">Flow network graph.</param>
     /// <returns>Value of found maximum flow</returns>
-    private static T modifyFlowFromResidual<T>(int source, int target, DirectedGraph<T> residual, 
+    private static T modifyFlowFromResidual<T>(int source, int target, DirectedGraph<T> residual,
         DirectedGraph<T> flow, DirectedGraph<T> network) where T : INumber<T>
     {
         T maxFlow = T.Zero;
@@ -117,7 +117,7 @@ public static class FordFulkersonNetworkExtender
                     currf = flow.GetEdgeWeight(to, from);
                     flow.SetEdgeWeight(to, from, currf - cmin);
                 }
-                
+
                 T front = residual.GetEdgeWeight(from, to) - cmin;
                 if (front == T.Zero)
                 {

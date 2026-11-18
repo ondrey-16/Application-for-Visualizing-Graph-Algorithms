@@ -9,9 +9,9 @@ public static class DFSGraphExtender
     /// Returns an object of graph searcher with a stack structure to invoke DFS search methods.
     /// </summary>
     /// <param name="graph">A graph to search.</param>
-    public static GraphSearcher DFS(this GraphBase graph) 
+    public static GraphSearcher DFS(this GraphBase graph)
         => new GraphSearcher(new Stack<int>(), graph);
-    
+
     /// <summary>
     /// Returns an object of graph searcher with a stack structure to invoke DFS search methods.
     /// </summary>

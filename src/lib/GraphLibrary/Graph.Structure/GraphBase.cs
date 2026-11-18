@@ -4,7 +4,7 @@ namespace AVGA.GraphLibrary;
 /// Abstract class for unweighted graphs objects.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-abstract public class GraphBase : IGraphMethods
+public abstract class GraphBase : IGraphMethods
 {
     /// <summary>
     /// A graph representation based on a adjacency dictionary.
@@ -28,15 +28,15 @@ abstract public class GraphBase : IGraphMethods
         _representation = new DictionaryRepresentation(s);
     }
 
-    abstract public int EdgeCount { get; }
-    abstract public bool AddEdge(int u, int v);
-    abstract public bool RemoveEdge(int u, int v);
-    abstract public object Clone();
+    public abstract int EdgeCount { get; }
+    public abstract bool AddEdge(int u, int v);
+    public abstract bool RemoveEdge(int u, int v);
+    public abstract object Clone();
 
     public int VertexCount => _representation.VertexCount;
     public int GetInDegree(int v) => _representation.GetInDegree(v);
     public int GetOutDegree(int v) => _representation.GetOutDegree(v);
-    public IEnumerable<int> GetNeighbours(int v)  => _representation.GetNeighbours(v);
+    public IEnumerable<int> GetNeighbours(int v) => _representation.GetNeighbours(v);
     public IEnumerable<Edge> GetOutEdges(int v) => _representation.GetOutEdges(v);
     public bool HasEdge(int u, int v) => _representation.HasEdge(u, v);
 }
@@ -46,7 +46,7 @@ abstract public class GraphBase : IGraphMethods
 /// Abstract class for weighted graphs objects.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-abstract public class GraphBase<T> : IWeightedGraphMethods<T>
+public abstract class GraphBase<T> : IWeightedGraphMethods<T>
 {
     /// <summary>
     /// A graph representation based on a adjacency dictionary.
@@ -70,15 +70,15 @@ abstract public class GraphBase<T> : IWeightedGraphMethods<T>
         _representation = new DictionaryRepresentation<T>(s, WeightReader);
     }
 
-    abstract public int EdgeCount { get; }
-    abstract public bool AddEdge(int u, int v, T w);
-    abstract public bool RemoveEdge(int u, int v);
-    abstract public object Clone();
+    public abstract int EdgeCount { get; }
+    public abstract bool AddEdge(int u, int v, T w);
+    public abstract bool RemoveEdge(int u, int v);
+    public abstract object Clone();
 
     public int VertexCount => _representation.VertexCount;
     public int GetInDegree(int v) => _representation.GetInDegree(v);
     public int GetOutDegree(int v) => _representation.GetOutDegree(v);
-    public IEnumerable<int> GetNeighbours(int v)  => _representation.GetNeighbours(v);
+    public IEnumerable<int> GetNeighbours(int v) => _representation.GetNeighbours(v);
     public bool HasEdge(int u, int v) => _representation.HasEdge(u, v);
     public IEnumerable<Edge<T>> GetOutEdges(int v) => _representation.GetOutEdges(v);
     public T GetEdgeWeight(int u, int v) => _representation.GetEdgeWeight(u, v);
@@ -109,10 +109,10 @@ abstract public class GraphBase<T> : IWeightedGraphMethods<T>
             {
                 throw new InvalidReadTypeException(weightParts[0]);
             }
-            
+
             return readW;
         }
-        
+
         throw new TypeCannotBeReadException<T>();
     }
 }

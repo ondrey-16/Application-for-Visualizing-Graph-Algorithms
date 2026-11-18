@@ -11,7 +11,7 @@ public class Graph : GraphBase
     /// <param name="V">Count of vertices</param>
     public Graph(int V)
         : base(V)
-    {}
+    { }
     /// <summary>
     /// Constructs a basic graph compatible with data read from stream.
     /// </summary>
@@ -39,7 +39,7 @@ public class Graph : GraphBase
 
     public override int EdgeCount => _representation.EdgeCount / 2;
 
-    public override bool AddEdge(int u, int v) 
+    public override bool AddEdge(int u, int v)
         => _representation.AddEdge(u, v) && _representation.AddEdge(v, u);
 
     public override bool RemoveEdge(int u, int v)
@@ -47,8 +47,8 @@ public class Graph : GraphBase
 
     public override object Clone()
     {
-        Graph cloned = new(this.VertexCount);
-        cloned._representation = (DictionaryRepresentation) this._representation.Clone();
+        Graph cloned = new(VertexCount);
+        cloned._representation = (DictionaryRepresentation)_representation.Clone();
 
         return cloned;
     }
@@ -67,7 +67,7 @@ public class Graph<T> : GraphBase<T>
     /// <param name="V">Count of vertices</param>
     public Graph(int V)
         : base(V)
-    {}
+    { }
     /// <summary>
     /// Constructs a basic weighted graph compatible with data read from stream.
     /// </summary>
@@ -95,7 +95,7 @@ public class Graph<T> : GraphBase<T>
 
     public override int EdgeCount => _representation.EdgeCount / 2;
 
-    public override bool AddEdge(int u, int v, T w) 
+    public override bool AddEdge(int u, int v, T w)
         => _representation.AddEdge(u, v, w) && _representation.AddEdge(v, u, w);
 
     public override bool RemoveEdge(int u, int v)
@@ -103,8 +103,8 @@ public class Graph<T> : GraphBase<T>
 
     public override object Clone()
     {
-        Graph<T> cloned = new(this.VertexCount);
-        cloned._representation = (DictionaryRepresentation<T>) this._representation.Clone();
+        Graph<T> cloned = new(VertexCount);
+        cloned._representation = (DictionaryRepresentation<T>)_representation.Clone();
 
         return cloned;
     }

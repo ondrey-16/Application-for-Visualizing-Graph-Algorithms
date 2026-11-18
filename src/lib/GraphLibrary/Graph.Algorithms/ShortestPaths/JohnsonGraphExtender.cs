@@ -32,7 +32,7 @@ public static class JohnsonGraphExtender
         {
             foreach (var edge in graph.GetOutEdges(i))
             {
-                tmpGraph.SetEdgeWeight(edge.From, edge.To, 
+                tmpGraph.SetEdgeWeight(edge.From, edge.To,
                     edge.Weight + tmpPaths.GetDistance(graph.VertexCount, edge.From) - tmpPaths.GetDistance(graph.VertexCount, edge.To));
             }
         }
@@ -41,7 +41,7 @@ public static class JohnsonGraphExtender
         {
             foreach (var edge in graph.GetOutEdges(i))
             {
-                newWeightedGraph.SetEdgeWeight(edge.From, edge.To, 
+                newWeightedGraph.SetEdgeWeight(edge.From, edge.To,
                     edge.Weight + tmpPaths.GetDistance(graph.VertexCount, edge.From) - tmpPaths.GetDistance(graph.VertexCount, edge.To));
             }
         }

@@ -22,7 +22,7 @@ public class DirectedGraphTests
         Assert.True(graph.VertexCount == 3);
         Assert.True(graph.EdgeCount == 3);
 
-        var cloned = (DirectedGraph) graph.Clone();
+        var cloned = (DirectedGraph)graph.Clone();
 
         Assert.True(cloned.HasEdge(0, 1));
         Assert.True(cloned.HasEdge(1, 2));
@@ -52,7 +52,7 @@ public class DirectedGraphTests
         Assert.True(graph.GetEdgeWeight(1, 2) == 2);
         Assert.True(graph.GetEdgeWeight(2, 0) == 1);
 
-        var cloned = (DirectedGraph<int>) graph.Clone();
+        var cloned = (DirectedGraph<int>)graph.Clone();
 
         Assert.True(cloned.GetEdgeWeight(0, 1) == 3);
         Assert.True(cloned.GetEdgeWeight(1, 2) == 2);
