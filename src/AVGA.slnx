@@ -7,6 +7,7 @@
     <Project Path="lib/GraphLibrary/GraphLibrary.csproj" />
   </Folder>
   <Folder Name="/vis-lib/">
+    <Project Path="vis-lib/GraphVisControl.Tests/GraphVisControl.Tests.csproj" />
     <Project Path="vis-lib/GraphVisControlLibrary/GraphVisControlLibrary.csproj" />
   </Folder>
 </Solution>
