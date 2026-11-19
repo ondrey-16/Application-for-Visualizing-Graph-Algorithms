@@ -11,6 +11,7 @@ public abstract class GraphBase : IGraphMethods, IGraphWithEvent
     /// </summary>
     protected DictionaryRepresentation _representation;
 
+    protected bool _activeEventInvoke = true;
     public event EventHandler<IGraphEvent>? GraphEvent;
 
     /// <summary>
@@ -44,11 +45,27 @@ public abstract class GraphBase : IGraphMethods, IGraphWithEvent
 
     public void VisitVertex(int v)
     {
-        GraphEvent?.Invoke(this, new VertexVisitedEvent(v));
+        if (_activeEventInvoke)
+        {
+            GraphEvent?.Invoke(this, new VertexVisitedEvent(v));
+        }
     }
     public void TraverseEdge(int u, int v)
     {
-        GraphEvent?.Invoke(this, new EdgeTraversedEvent(u, v));
+        if (_activeEventInvoke)
+        {
+            GraphEvent?.Invoke(this, new EdgeTraversedEvent(u, v));
+        }
+    }
+
+    public void Start()
+    {
+        _activeEventInvoke = true;
+    }
+
+    public void Stop()
+    {
+        _activeEventInvoke = false;
     }
 }
 
@@ -64,6 +81,7 @@ public abstract class GraphBase<T> : IWeightedGraphMethods<T>, IGraphWithEvent
     /// </summary>
     protected DictionaryRepresentation<T> _representation;
 
+    protected bool _activeEventInvoke = true;
     public event EventHandler<IGraphEvent>? GraphEvent;
 
     /// <summary>
@@ -131,10 +149,26 @@ public abstract class GraphBase<T> : IWeightedGraphMethods<T>, IGraphWithEvent
 
     public void VisitVertex(int v)
     {
-        GraphEvent?.Invoke(this, new VertexVisitedEvent(v));
+        if (_activeEventInvoke)
+        {
+            GraphEvent?.Invoke(this, new VertexVisitedEvent(v));
+        }
     }
     public void TraverseEdge(int u, int v)
     {
-        GraphEvent?.Invoke(this, new EdgeTraversedEvent(u, v));
+        if (_activeEventInvoke)
+        {
+            GraphEvent?.Invoke(this, new EdgeTraversedEvent(u, v));
+        }
+    }
+
+    public void Start()
+    {
+        _activeEventInvoke = true;
+    }
+
+    public void Stop()
+    {
+        _activeEventInvoke = false;
     }
 }
