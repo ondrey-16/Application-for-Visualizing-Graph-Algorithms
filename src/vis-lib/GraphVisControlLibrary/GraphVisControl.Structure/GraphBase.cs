@@ -4,14 +4,14 @@ namespace AVGA.GraphVisControlLibrary;
 /// Abstract class for unweighted graphs objects.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-public abstract class GraphBase : IGraphMethods
+public abstract class GraphBase : IGraphMethods, IGraphWithEvent
 {
     /// <summary>
     /// A graph representation based on a adjacency dictionary.
     /// </summary>
     protected DictionaryRepresentation _representation;
 
-    public List<IGraphEvent> GraphEvents { get; private set; }
+    public event EventHandler<IGraphEvent>? GraphEvent;
 
     /// <summary>
     /// Constructs an empty graph reserved for V vertices.
@@ -19,7 +19,6 @@ public abstract class GraphBase : IGraphMethods
     /// <param name="V">Count of vertices.</param>
     public GraphBase(int V)
     {
-        GraphEvents = new List<IGraphEvent>();
         _representation = new DictionaryRepresentation(V);
     }
     /// <summary>
@@ -28,7 +27,6 @@ public abstract class GraphBase : IGraphMethods
     /// <param name="s">Graph data stream</param>
     public GraphBase(Stream s)
     {
-        GraphEvents = new List<IGraphEvent>();
         _representation = new DictionaryRepresentation(s);
     }
 
@@ -43,6 +41,15 @@ public abstract class GraphBase : IGraphMethods
     public IEnumerable<int> GetNeighbours(int v) => _representation.GetNeighbours(v);
     public IEnumerable<Edge> GetOutEdges(int v) => _representation.GetOutEdges(v);
     public bool HasEdge(int u, int v) => _representation.HasEdge(u, v);
+
+    public void VisitVertex(int v)
+    {
+        GraphEvent?.Invoke(this, new VertexVisitedEvent(v));
+    }
+    public void TraverseEdge(int u, int v)
+    {
+        GraphEvent?.Invoke(this, new EdgeTraversedEvent(u, v));
+    }
 }
 
 
@@ -50,14 +57,14 @@ public abstract class GraphBase : IGraphMethods
 /// Abstract class for weighted graphs objects.
 /// </summary>
 /// <typeparam name="T">Type of edges weights.</typeparam>
-public abstract class GraphBase<T> : IWeightedGraphMethods<T>
+public abstract class GraphBase<T> : IWeightedGraphMethods<T>, IGraphWithEvent
 {
     /// <summary>
     /// A graph representation based on a adjacency dictionary.
     /// </summary>
     protected DictionaryRepresentation<T> _representation;
 
-    public List<IGraphEvent> GraphEvents { get; private set; }
+    public event EventHandler<IGraphEvent>? GraphEvent;
 
     /// <summary>
     /// Constructs a weighted graph reserved for V vertices.
@@ -65,7 +72,6 @@ public abstract class GraphBase<T> : IWeightedGraphMethods<T>
     /// <param name="V">Count of vertices.</param>
     public GraphBase(int V)
     {
-        GraphEvents = new List<IGraphEvent>();
         _representation = new DictionaryRepresentation<T>(V);
     }
     /// <summary>
@@ -74,7 +80,6 @@ public abstract class GraphBase<T> : IWeightedGraphMethods<T>
     /// <param name="s">Graph data stream</param>
     public GraphBase(Stream s)
     {
-        GraphEvents = new List<IGraphEvent>();
         _representation = new DictionaryRepresentation<T>(s, WeightReader);
     }
 
@@ -122,5 +127,14 @@ public abstract class GraphBase<T> : IWeightedGraphMethods<T>
         }
 
         throw new TypeCannotBeReadException<T>();
+    }
+
+    public void VisitVertex(int v)
+    {
+        GraphEvent?.Invoke(this, new VertexVisitedEvent(v));
+    }
+    public void TraverseEdge(int u, int v)
+    {
+        GraphEvent?.Invoke(this, new EdgeTraversedEvent(u, v));
     }
 }

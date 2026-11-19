@@ -2,32 +2,49 @@ namespace AVGA.GraphVisControl.Tests;
 
 public class GraphVisualizationControllerTests
 {
+    private sealed class FakeVisualizationState
+    {
+        public int VisualizationState = -1;
+    }
+    private static readonly FakeVisualizationState _visualizationState = new();
     private sealed class FakeEvent : IGraphEvent
     {
-        public int ExecuteCount { get; private set; }
+        public int ExecuteNum { get; private set; }
+        private readonly FakeVisualizationState _visualizationState;
+        public FakeEvent(FakeVisualizationState visualizationState, int executeNum)
+        {
+            _visualizationState = visualizationState;
+            ExecuteNum = executeNum;
+        }
 
         public void Execute()
         {
-            ExecuteCount++;
+            _visualizationState.VisualizationState = ExecuteNum;
         }
     }
 
-    private static List<IGraphEvent> CreateEvents(int count)
+    private sealed class FakeEventGraph : IGraphWithEvent
     {
-        var events = new List<IGraphEvent>();
+        public event EventHandler<IGraphEvent>? GraphEvent;
+        public void InvokeFakeEvent(int executeNum)
+        {
+            GraphEvent?.Invoke(this, new FakeEvent(_visualizationState, executeNum));
+        }
+    }
 
+    private static void CreateEvents(FakeEventGraph graph, int count)
+    {
         for (int i = 0; i < count; i++)
         {
-            events.Add(new FakeEvent());
+            graph.InvokeFakeEvent(i);
         }
-
-        return events;
     }
 
     [Fact]
     public void NewController_StartsAtStepZero()
     {
-        var controller = new GraphVisualizationController(CreateEvents(3));
+        FakeEventGraph graph = new();
+        var controller = new GraphVisualizationController(graph);
 
         Assert.Equal(0, controller.CurrentStep);
     }
@@ -35,7 +52,9 @@ public class GraphVisualizationControllerTests
     [Fact]
     public void NextStep_MovesToNextEvent()
     {
-        var controller = new GraphVisualizationController(CreateEvents(3));
+        FakeEventGraph graph = new();
+        var controller = new GraphVisualizationController(graph);
+        CreateEvents(graph, 3);
 
         controller.NextStep();
 
@@ -45,19 +64,22 @@ public class GraphVisualizationControllerTests
     [Fact]
     public void NextStep_AtLastEvent_StaysOnLastEvent()
     {
-        var controller = new GraphVisualizationController(CreateEvents(2));
+        FakeEventGraph graph = new();
+        var controller = new GraphVisualizationController(graph);
+        CreateEvents(graph, 3);
 
         controller.NextStep();
         controller.NextStep();
         controller.NextStep();
 
-        Assert.Equal(1, controller.CurrentStep);
+        Assert.Equal(2, controller.CurrentStep);
     }
 
     [Fact]
     public void NextStep_WithNoEvents_StaysAtZero()
     {
-        var controller = new GraphVisualizationController(CreateEvents(0));
+        FakeEventGraph graph = new();
+        var controller = new GraphVisualizationController(graph);
 
         controller.NextStep();
 
@@ -67,7 +89,10 @@ public class GraphVisualizationControllerTests
     [Fact]
     public void PreviousStep_MovesToPreviousEvent()
     {
-        var controller = new GraphVisualizationController(CreateEvents(3));
+        FakeEventGraph graph = new();
+        var controller = new GraphVisualizationController(graph);
+        CreateEvents(graph, 3);
+
         controller.NextStep();
         controller.NextStep();
 
@@ -79,7 +104,9 @@ public class GraphVisualizationControllerTests
     [Fact]
     public void PreviousStep_AtFirstEvent_StaysAtZero()
     {
-        var controller = new GraphVisualizationController(CreateEvents(3));
+        FakeEventGraph graph = new();
+        var controller = new GraphVisualizationController(graph);
+        CreateEvents(graph, 3);
 
         controller.PreviousStep();
 
@@ -89,48 +116,57 @@ public class GraphVisualizationControllerTests
     [Fact]
     public void Restart_GoesBackToFirstStep_AndKeepsEvents()
     {
-        var events = CreateEvents(3);
-        var controller = new GraphVisualizationController(events);
+        FakeEventGraph graph = new();
+        var controller = new GraphVisualizationController(graph);
+        CreateEvents(graph, 3);
+
         controller.NextStep();
         controller.NextStep();
 
         controller.Restart();
 
         Assert.Equal(0, controller.CurrentStep);
-        Assert.Equal(3, events.Count);
+        Assert.Equal(3, controller.EventsCount);
     }
 
     [Fact]
     public void Reset_ClearsEventsAndGoesBackToFirstStep()
     {
-        var events = CreateEvents(3);
-        var controller = new GraphVisualizationController(events);
+        FakeEventGraph graph = new();
+        var controller = new GraphVisualizationController(graph);
+        CreateEvents(graph, 3);
+
         controller.NextStep();
 
         controller.Reset();
 
         Assert.Equal(0, controller.CurrentStep);
-        Assert.Empty(events);
+        Assert.Equal(0, controller.EventsCount);
     }
 
     [Fact]
     public void ExecuteEvent_ExecutesOnlyTheCurrentEvent()
     {
-        var first = new FakeEvent();
-        var second = new FakeEvent();
-        var controller = new GraphVisualizationController(new List<IGraphEvent> { first, second });
-        controller.NextStep();
+        FakeEventGraph graph = new();
+        var controller = new GraphVisualizationController(graph);
+        CreateEvents(graph, 3);
 
+        controller.NextStep();
         controller.ExecuteEvent();
 
-        Assert.Equal(0, first.ExecuteCount);
-        Assert.Equal(1, second.ExecuteCount);
+        Assert.Equal(1, _visualizationState.VisualizationState);
+
+        controller.NextStep();
+        controller.ExecuteEvent();
+
+        Assert.Equal(2, _visualizationState.VisualizationState);
     }
 
     [Fact]
     public void ExecuteEvent_WithNoEvents_Throws()
     {
-        var controller = new GraphVisualizationController(CreateEvents(0));
+        FakeEventGraph graph = new();
+        var controller = new GraphVisualizationController(graph);
 
         Assert.Throws<ArgumentOutOfRangeException>(() => controller.ExecuteEvent());
     }

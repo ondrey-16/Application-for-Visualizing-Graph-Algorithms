@@ -3,11 +3,35 @@ namespace AVGA.GraphVisControlLibrary;
 public class GraphVisualizationController
 {
     private readonly List<IGraphEvent> _graphEvents;
+    private Action? _unsubscribe;
     public int CurrentStep { get; private set; }
+    public int EventsCount => _graphEvents.Count;
 
-    public GraphVisualizationController(List<IGraphEvent> graphEvents)
+    public GraphVisualizationController(IGraphWithEvent graph)
     {
-        _graphEvents = graphEvents;
+        _graphEvents = new List<IGraphEvent>();
+        CurrentStep = 0;
+        graph.GraphEvent += GraphEventHandler;
+        _unsubscribe = () => graph.GraphEvent -= GraphEventHandler;
+    }
+
+    public void Subscribe(IGraphWithEvent graph)
+    {
+        Unsubscribe();
+        graph.GraphEvent += GraphEventHandler;
+        _unsubscribe = () => graph.GraphEvent -= GraphEventHandler;
+    }
+
+    private void GraphEventHandler(object? sender, IGraphEvent graphEvent)
+    {
+        _graphEvents.Add(graphEvent);
+    }
+
+    private void Unsubscribe()
+    {
+        _unsubscribe?.Invoke();
+        _unsubscribe = null;
+        _graphEvents.Clear();
         CurrentStep = 0;
     }
 
@@ -31,8 +55,7 @@ public class GraphVisualizationController
     }
     public void Reset()
     {
-        _graphEvents.Clear();
-        CurrentStep = 0;
+        Unsubscribe();
     }
     public void ExecuteEvent()
     {
