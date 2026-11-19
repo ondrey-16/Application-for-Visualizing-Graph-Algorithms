@@ -14,7 +14,7 @@ public class GraphVisualizationController
         graph.GraphEvent += GraphEventHandler;
         _unsubscribe = () => graph.GraphEvent -= GraphEventHandler;
     }
-    
+
     public void Subscribe(IGraphWithEvent graph)
     {
         Unsubscribe();

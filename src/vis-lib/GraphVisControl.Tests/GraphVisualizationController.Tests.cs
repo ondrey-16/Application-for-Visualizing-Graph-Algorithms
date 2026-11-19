@@ -92,7 +92,7 @@ public class GraphVisualizationControllerTests
         FakeEventGraph graph = new();
         var controller = new GraphVisualizationController(graph);
         CreateEvents(graph, 3);
-        
+
         controller.NextStep();
         controller.NextStep();
 
