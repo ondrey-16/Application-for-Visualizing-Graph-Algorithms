@@ -53,7 +53,7 @@ public class GraphSearcher
         int currV, to;
         _enumerators[v] = _graph.GetOutEdges(v).GetEnumerator();
         _O.Push(v);
-        _graph.GraphEvents.Add(new VertexVisitedEvent(v));
+        _graph.VisitVertex(v);
 
         try
         {
@@ -67,11 +67,11 @@ public class GraphSearcher
                     continue;
                 }
                 to = _enumerators[currV].Current.To;
-                _graph.GraphEvents.Add(new EdgeTraversedEvent(currV, to));
+                _graph.TraverseEdge(currV, to);
 
                 if (_enumerators[to] is null)
                 {
-                    _graph.GraphEvents.Add(new VertexVisitedEvent(to));
+                    _graph.VisitVertex(to);
                     _enumerators[to] = _graph.GetOutEdges(to).GetEnumerator();
                     _O.Push(to);
                 }
@@ -147,7 +147,7 @@ public class GraphSearcher<T>
         int currV, to;
         _enumerators[v] = _graph.GetOutEdges(v).GetEnumerator();
         _O.Push(v);
-        _graph.GraphEvents.Add(new VertexVisitedEvent(v));
+        _graph.VisitVertex(v);
 
         try
         {
@@ -161,11 +161,11 @@ public class GraphSearcher<T>
                     continue;
                 }
                 to = _enumerators[currV].Current.To;
-                _graph.GraphEvents.Add(new EdgeTraversedEvent(currV, to));
+                _graph.TraverseEdge(currV, to);
 
                 if (_enumerators[to] is null)
                 {
-                    _graph.GraphEvents.Add(new VertexVisitedEvent(to));
+                    _graph.VisitVertex(to);
                     _enumerators[to] = _graph.GetOutEdges(to).GetEnumerator();
                     _O.Push(to);
                 }
